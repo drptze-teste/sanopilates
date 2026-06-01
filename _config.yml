@@ -1,0 +1,18 @@
+title: "Benesse Pilates"
+description: "Studio de Pilates · Chácara Santo Antônio — dicas, artigos e novidades sobre Pilates e bem-estar."
+url: "https://sanopilates.com.br"
+baseurl: ""
+
+# Exclui arquivos que não são do Jekyll
+exclude:
+  - "imagens e video estudio/"
+  - "PROJETO-BENESSE-PILATES-STATUS.md"
+  - README.md
+
+# Configurações de post
+permalink: /blog/:year/:month/:day/:title/
+paginate: 6
+paginate_path: "/blog/page:num/"
+
+plugins:
+  - jekyll-paginate

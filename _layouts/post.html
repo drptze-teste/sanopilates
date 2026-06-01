@@ -1,0 +1,79 @@
+---
+layout: default
+---
+<style>
+  .post-hero{
+    padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px);
+    background:
+      radial-gradient(120% 90% at 88% -10%,rgba(124,139,111,.22),transparent 60%),
+      radial-gradient(90% 70% at -10% 110%,rgba(193,107,67,.12),transparent 55%),
+      var(--cream);
+  }
+  .post-kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--sage-deep);margin-bottom:14px;
+  }
+  .post-kicker::before{content:"";width:26px;height:1.5px;background:var(--clay)}
+  .post-title{font-size:clamp(28px,5vw,52px);margin-bottom:16px;max-width:20ch}
+  .post-title em{font-style:italic;color:var(--clay)}
+  .post-meta{font-size:14px;color:var(--ink-soft)}
+  .post-meta time{font-weight:600;color:var(--ink)}
+
+  .post-cover{
+    width:100%;max-height:480px;object-fit:cover;
+    border-radius:16px;margin:32px 0;
+    box-shadow:0 12px 40px -8px rgba(43,51,39,.18);
+  }
+
+  .post-body{
+    max-width:68ch;margin:0 auto;
+    padding:40px 0 80px;
+  }
+  .post-body h2{font-size:clamp(22px,3vw,30px);margin:2em 0 .6em;color:var(--ink)}
+  .post-body h3{font-size:clamp(18px,2.4vw,24px);margin:1.8em 0 .5em;color:var(--sage-deep)}
+  .post-body p{margin-bottom:1.4em;font-size:clamp(15px,1.8vw,17px);color:var(--ink-soft);line-height:1.75}
+  .post-body ul,.post-body ol{margin:0 0 1.4em 1.4em;font-size:clamp(15px,1.8vw,17px);color:var(--ink-soft);line-height:1.75}
+  .post-body li{margin-bottom:.4em}
+  .post-body strong{color:var(--ink);font-weight:700}
+  .post-body em{color:var(--clay)}
+  .post-body blockquote{
+    border-left:3px solid var(--clay);
+    padding:12px 20px;margin:2em 0;
+    background:var(--cream-2);border-radius:0 8px 8px 0;
+    font-family:'Fraunces',serif;font-size:1.15em;color:var(--ink);
+  }
+  .post-body img{width:100%;border-radius:10px;margin:1.5em 0}
+  .post-body a{color:var(--clay);text-decoration:underline;text-underline-offset:3px}
+  .post-body hr{border:none;border-top:1px solid var(--line);margin:2.5em 0}
+
+  .back-link{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:14px;font-weight:600;color:var(--sage-deep);
+    margin-bottom:28px;
+  }
+  .back-link:hover{color:var(--clay)}
+  .back-link::before{content:"←"}
+</style>
+
+<section class="post-hero">
+  <div class="wrap">
+    <a href="{{ site.baseurl }}/blog/" class="back-link">Voltar ao Blog</a>
+    <p class="post-kicker">Benesse Blog</p>
+    <h1 class="post-title">{{ page.title }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d de %B de %Y" }}</time>
+      {% if page.author %} · {{ page.author }}{% endif %}
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  {% if page.cover %}
+  <img src="{{ page.cover | relative_url }}" alt="{{ page.title }}" class="post-cover" />
+  {% endif %}
+
+  <article class="post-body">
+    {{ content }}
+  </article>
+</div>

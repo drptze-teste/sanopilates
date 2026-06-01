@@ -1,0 +1,106 @@
+---
+layout: default
+title: "Blog"
+description: "Dicas de Pilates, bem-estar e novidades do estúdio."
+---
+<style>
+  .blog-hero{
+    padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px);
+    background:
+      radial-gradient(120% 90% at 88% -10%,rgba(124,139,111,.22),transparent 60%),
+      radial-gradient(90% 70% at -10% 110%,rgba(193,107,67,.12),transparent 55%),
+      var(--cream);
+  }
+  .blog-kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--sage-deep);margin-bottom:14px;
+  }
+  .blog-kicker::before{content:"";width:26px;height:1.5px;background:var(--clay)}
+  .blog-hero h1{font-size:clamp(32px,5vw,56px);margin-bottom:12px}
+  .blog-hero h1 em{font-style:italic;color:var(--clay)}
+  .blog-hero p{font-size:clamp(15px,2vw,18px);color:var(--ink-soft);max-width:48ch}
+
+  .posts-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:32px;
+    padding:56px 0 80px;
+  }
+  .post-card{
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .post-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 16px 40px -12px rgba(43,51,39,.16);
+  }
+  .post-card-cover{
+    width:100%;height:200px;object-fit:cover;display:block;
+    background:var(--cream-2);
+  }
+  .post-card-cover-placeholder{
+    width:100%;height:200px;
+    background:linear-gradient(135deg,var(--cream-2),var(--sage) 200%);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-size:48px;color:rgba(255,255,255,.4);
+  }
+  .post-card-body{padding:24px}
+  .post-card-date{font-size:12px;font-weight:600;color:var(--sage-deep);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+  .post-card-title{font-size:clamp(18px,2.2vw,22px);margin-bottom:10px;line-height:1.2}
+  .post-card-title a:hover{color:var(--clay)}
+  .post-card-excerpt{font-size:14px;color:var(--ink-soft);line-height:1.6;margin-bottom:18px}
+  .post-card-link{
+    font-size:13px;font-weight:700;color:var(--clay);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .post-card-link::after{content:"→";transition:transform .15s}
+  .post-card-link:hover::after{transform:translateX(4px)}
+
+  .empty-state{
+    text-align:center;padding:80px 24px;color:var(--ink-soft);
+    grid-column:1/-1;
+  }
+  .empty-state h2{font-size:24px;margin-bottom:8px;color:var(--ink)}
+</style>
+
+<section class="blog-hero">
+  <div class="wrap">
+    <p class="blog-kicker">Nosso Blog</p>
+    <h1>Bem-estar em <em>movimento</em></h1>
+    <p>Dicas de Pilates, saúde, postura e novidades do estúdio.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="posts-grid">
+    {% assign posts = site.posts %}
+    {% if posts.size > 0 %}
+      {% for post in posts %}
+      <article class="post-card">
+        {% if post.cover %}
+        <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="post-card-cover" />
+        {% else %}
+        <div class="post-card-cover-placeholder">✦</div>
+        {% endif %}
+        <div class="post-card-body">
+          <p class="post-card-date">{{ post.date | date: "%d %b %Y" }}</p>
+          <h2 class="post-card-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+          {% if post.excerpt %}
+          <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncatewords: 28 }}</p>
+          {% endif %}
+          <a href="{{ post.url | relative_url }}" class="post-card-link">Ler artigo</a>
+        </div>
+      </article>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <h2>Em breve</h2>
+        <p>Os primeiros artigos estão a caminho. Volte logo!</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
