@@ -9,7 +9,7 @@
   // ─── CONFIGURAÇÃO ──────────────────────────────────────────────────────────
   // Substitua pela URL real da sua Cloud Function após o deploy
   // Exemplo: https://us-central1-sanopilates-blog.cloudfunctions.net/translatePost
-  const FUNCTION_URL = "https://us-central1-sanopilates-blog.cloudfunctions.net/translatePost";
+  const FUNCTION_URL = "https://translatepost-3jojicxvva-uc.a.run.app";
 
   const LANGS = {
     pt: { label: "PT", flag: "🇧🇷", name: "Português" },
