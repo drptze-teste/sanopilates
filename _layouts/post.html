@@ -1,6 +1,7 @@
 ---
 layout: default
 ---
+<link rel="stylesheet" href="{{ site.baseurl }}/blog/css/translator.css">
 <style>
   .post-hero{
     padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px);
@@ -73,7 +74,9 @@ layout: default
   <img src="{{ page.cover | relative_url }}" alt="{{ page.title }}" class="post-cover" />
   {% endif %}
 
-  <article class="post-body">
+  <article class="post-body" data-md="{{ page.content | strip_html | escape }}">
     {{ content }}
   </article>
 </div>
+
+<script src="{{ site.baseurl }}/blog/js/translator.js"></script>

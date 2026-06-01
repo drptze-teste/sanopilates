@@ -1,0 +1,131 @@
+/* =====================================================
+   Barra de tradução — Benesse Pilates Blog
+   Segue a identidade: cream / sage / clay / Hanken Grotesk
+   ===================================================== */
+
+.lang-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.lang-bar__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-right: 4px;
+}
+
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  white-space: nowrap;
+}
+
+.lang-btn:hover {
+  border-color: var(--sage);
+  color: var(--ink);
+}
+
+.lang-btn.active {
+  background: var(--sage-deep);
+  border-color: var(--sage-deep);
+  color: #fff;
+}
+
+.lang-btn .flag {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Estado de carregando */
+.lang-btn.loading {
+  opacity: .6;
+  pointer-events: none;
+}
+
+/* Overlay de tradução */
+.translation-overlay {
+  position: relative;
+}
+
+.translation-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(244, 239, 230, .7);
+  border-radius: 8px;
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+/* Spinner de "Traduzindo..." */
+.translate-status {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sage-deep);
+  margin-bottom: 28px;
+  padding: 12px 18px;
+  background: var(--cream-2);
+  border-radius: 100px;
+  border: 1px solid var(--line);
+}
+
+.translate-status.visible {
+  display: inline-flex;
+}
+
+.translate-status__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--line);
+  border-top-color: var(--clay);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Badge de idioma ativo (aparece no topo do conteúdo traduzido) */
+.lang-notice {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  padding: 10px 16px;
+  background: var(--cream-2);
+  border-left: 3px solid var(--clay);
+  border-radius: 0 8px 8px 0;
+}
+
+.lang-notice.visible {
+  display: flex;
+}
+
+@media (max-width: 600px) {
+  .lang-bar { gap: 6px; }
+  .lang-btn { padding: 6px 12px; font-size: 12px; }
+}
