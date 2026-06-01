@@ -1,9 +1,9 @@
 const { onRequest } = require("firebase-functions/v2/https");
 const { defineSecret } = require("firebase-functions/params");
-const Anthropic = require("@anthropic-ai/sdk");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Chave armazenada de forma segura no Secret Manager do Google Cloud
-const anthropicKey = defineSecret("ANTHROPIC_API_KEY");
+const geminiKey = defineSecret("GEMINI_API_KEY");
 
 // Rate limiting simples em memória (10 chamadas / IP / hora)
 const rateLimitMap = new Map();
@@ -29,7 +29,6 @@ function checkRateLimit(ip) {
 const ALLOWED_ORIGINS = [
   "https://sanopilates.com.br",
   "https://www.sanopilates.com.br",
-  // Permite testes locais via Jekyll serve
   "http://localhost:4000",
   "http://127.0.0.1:4000",
 ];
@@ -41,14 +40,14 @@ const LANG_NAMES = {
 
 exports.translatePost = onRequest(
   {
-    secrets: [anthropicKey],
+    secrets: [geminiKey],
     region: "us-central1",
     cors: ALLOWED_ORIGINS,
     timeoutSeconds: 60,
     memory: "256MiB",
   },
   async (req, res) => {
-    // Preflight CORS
+    // CORS headers
     const origin = req.headers.origin;
     if (ALLOWED_ORIGINS.includes(origin)) {
       res.set("Access-Control-Allow-Origin", origin);
@@ -56,13 +55,8 @@ exports.translatePost = onRequest(
     res.set("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.set("Access-Control-Allow-Headers", "Content-Type");
 
-    if (req.method === "OPTIONS") {
-      return res.status(204).send("");
-    }
-
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Método não permitido" });
-    }
+    if (req.method === "OPTIONS") return res.status(204).send("");
+    if (req.method !== "POST") return res.status(405).json({ error: "Método não permitido" });
 
     // Rate limiting
     const ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.ip || "unknown";
@@ -70,9 +64,8 @@ exports.translatePost = onRequest(
       return res.status(429).json({ error: "Limite de requisições atingido. Tente novamente em 1 hora." });
     }
 
-    // Validação do body
+    // Validação
     const { content, targetLang } = req.body;
-
     if (!content || typeof content !== "string") {
       return res.status(400).json({ error: "Campo 'content' obrigatório" });
     }
@@ -86,20 +79,14 @@ exports.translatePost = onRequest(
     const langName = LANG_NAMES[targetLang];
 
     try {
-      const client = new Anthropic({ apiKey: anthropicKey.value() });
+      const genAI = new GoogleGenerativeAI(geminiKey.value());
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      const message = await client.messages.create({
-        model: "claude-sonnet-4-5",
-        max_tokens: 4096,
-        messages: [
-          {
-            role: "user",
-            content: `Você é um tradutor preciso e natural. Traduza o seguinte post de blog do português para ${langName}. Mantenha o tom leve e acessível, adequado para leitores interessados em saúde e bem-estar. Retorne apenas o texto traduzido em Markdown, sem explicações adicionais.\n\n${content}`,
-          },
-        ],
-      });
+      const prompt = `Você é um tradutor preciso e natural. Traduza o seguinte post de blog do português para ${langName}. Mantenha o tom leve e acessível, adequado para leitores interessados em saúde e bem-estar. Retorne apenas o texto traduzido em Markdown, sem explicações adicionais.\n\n${content}`;
 
-      const translated = message.content[0].text;
+      const result = await model.generateContent(prompt);
+      const translated = result.response.text();
+
       return res.status(200).json({ translated });
 
     } catch (err) {
