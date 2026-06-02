@@ -506,6 +506,31 @@
   <div class="wrap">
     <h2>Vamos começar?</h2>
     <p>Agende sua aula experimental de Pilates. Sem compromisso — venha conhecer o espaço e sentir a diferença.</p>
+
+    <!-- Links rápidos lado a lado: valores, aula, massagem, blog -->
+    <style>
+      .quick-links{
+        display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+        max-width:760px;margin:0 auto 30px;
+      }
+      .quick-links a{
+        flex:1 1 170px;
+        display:inline-flex;align-items:center;justify-content:center;gap:8px;
+        background:#fff;color:var(--sage-deep);
+        font-weight:700;font-size:15px;text-decoration:none;
+        padding:15px 18px;border-radius:14px;
+        transition:transform .08s ease,opacity .15s ease;
+      }
+      .quick-links a:hover{opacity:.9}
+      .quick-links a:active{transform:scale(.98)}
+      @media(max-width:520px){ .quick-links a{flex:1 1 100%} }
+    </style>
+    <div class="quick-links">
+      <a href="https://app.tecnofit.com.br/ng/online-sale/Mjk3MTM" onclick="return abrirWhatsApp(this.href)">💰 Tabela de valores</a>
+      <a href="https://app.tecnofit.com.br/tfRedirect?u=763B8AC292B7" onclick="return abrirWhatsApp(this.href)">🧘 Aula experimental</a>
+      <a href="https://cadastroestudiobenesse.web.app/" onclick="return abrirWhatsApp(this.href)">💆 Agende sua massagem</a>
+      <a href="/blog/">📝 Nosso blog</a>
+    </div>
     <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;align-items:center">
       <!-- Principal: agendamento da aula experimental -->
       <a class="btn-wa"
