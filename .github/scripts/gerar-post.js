@@ -211,12 +211,18 @@ Regras: não use front matter YAML, não escreva "hashtags", não inclua imagens
     .trim()
     .substring(0, 60);
 
+  // Monta o link público do post (permalink: /blog/:year/:month/:day/:title/)
+  const slug = `post-semana-${String(semana).padStart(2, '0')}`;
+  const postUrl = `https://sanopilates.com.br/blog/${ano}/${pad(hoje.getMonth() + 1)}/${pad(hoje.getDate())}/${slug}/`;
+
   // Exporta variáveis para o GitHub Actions
   const envFile = process.env.GITHUB_ENV;
   if (envFile) {
     fs.appendFileSync(envFile, `NOME_ARQUIVO=${nomeArquivo}\n`);
     fs.appendFileSync(envFile, `SEMANA=${semana}\n`);
     fs.appendFileSync(envFile, `TEMA=${temaSanitizado}\n`);
+    fs.appendFileSync(envFile, `TITULO=${titulo}\n`);
+    fs.appendFileSync(envFile, `POST_URL=${postUrl}\n`);
   }
 }
 

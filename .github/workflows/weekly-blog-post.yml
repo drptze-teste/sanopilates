@@ -37,3 +37,20 @@ jobs:
           git add "$NOME_ARQUIVO"
           git commit -m "[bot] Post automático - semana $SEMANA — $TEMA"
           git push
+
+      - name: Avisar no WhatsApp (CallMeBot)
+        if: success()
+        env:
+          PHONE:  ${{ secrets.WHATSAPP_PHONE }}
+          APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
+        run: |
+          if [ -z "$PHONE" ] || [ -z "$APIKEY" ]; then
+            echo "WHATSAPP_PHONE ou CALLMEBOT_APIKEY não configurados — pulando aviso."
+            exit 0
+          fi
+          MENSAGEM="✅ Novo post no blog do Estúdio Benesse Pilates: $TITULO — $POST_URL"
+          curl -s -G "https://api.callmebot.com/whatsapp.php" \
+            --data-urlencode "phone=$PHONE" \
+            --data-urlencode "text=$MENSAGEM" \
+            --data-urlencode "apikey=$APIKEY"
+          echo "Aviso de WhatsApp enviado."
