@@ -182,6 +182,35 @@ Na seção final (`<section class="final">` do `index.html`), fileira de 4 botõ
 
 ---
 
+## 7.1 Estratégia de links nos posts (SEO)
+
+Regra de ouro: **link interno no meio, links externos só no final.**
+
+| Onde | O quê | Por quê |
+|------|-------|---------|
+| **Meio do texto** | Apenas **link interno** (para a landing `/` ou outro post) | Máximo valor de SEO; retém o visitante no site |
+| **Final do texto** | Box de assinatura com site do estúdio + site da empresa + Instagram | Reforça a marca/entidade e o engajamento, sem poluir a leitura |
+| **Instagram/redes** | Só no final, **nunca no meio** | Não tira o leitor do artigo no meio da leitura |
+
+**Link interno no meio (gerado pelo script):** o `gerar-post.js` insere um callout antes do 2º subtítulo:
+```markdown
+> 💡 **Na prática:** quer sentir esses benefícios no corpo? [Conheça o Estúdio Benesse Pilates](/) e agende uma aula experimental.
+```
+
+**Box de assinatura (no `_layouts/post.html`, aparece em todo post):**
+```html
+<p class="post-cta-links">
+  <a href="{{ site.baseurl }}/">Site do estúdio</a> ·
+  <a href="https://SITE-DA-EMPRESA.com.br" target="_blank" rel="noopener">Nome da Empresa</a> ·
+  <a href="https://www.instagram.com/PERFIL" target="_blank" rel="noopener">Instagram</a>
+</p>
+```
+> Links externos sempre com `target="_blank"` e `rel="noopener"`.
+
+**Dica:** se o site da empresa colocar um link **de volta** para o estúdio, os dois domínios se fortalecem mutuamente. Não repetir o link da empresa em todo parágrafo (vira spam) — 1 vez por post, no box final, basta.
+
+---
+
 ## 8. Checklist para replicar em um site novo
 
 - [ ] Criar repositório e ativar GitHub Pages (branch `main`, root)
@@ -193,7 +222,8 @@ Na seção final (`<section class="final">` do `index.html`), fileira de 4 botõ
 - [ ] Copiar `.github/workflows/` e `.github/scripts/`, ajustar o `repo` e a galeria de fotos
 - [ ] Secret `GEMINI_API_KEY` (começa com `AIza`)
 - [ ] Marcar **Read and write permissions** em Actions
-- [ ] Ativar CallMeBot e cadastrar `WHATSAPP_PHONE` + `CALLMEBOT_APIKEY`
+- [ ] Ativar CallMeBot e cadastrar `WHATSAPP_PHONE` + `CALLMEBOT_APIKEY` (secrets **separados**, um valor em cada)
+- [ ] Ajustar o box de assinatura SEO no `post.html` (site da empresa + Instagram do site novo)
 - [ ] Rodar o workflow manual (`Run workflow`) para testar tudo de uma vez
 
 ---
