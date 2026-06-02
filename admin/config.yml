@@ -2,7 +2,7 @@ backend:
   name: github
   repo: drptze-teste/sanopilates
   branch: main
-  auth_type: implicit
+  auth_type: pkce
   app_id: Ov23libD0ygLuYT2rpFl
 
 # Pasta onde ficam as imagens enviadas pelo CMS
