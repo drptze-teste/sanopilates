@@ -1,0 +1,8 @@
+{
+  "name": "blog-scripts",
+  "private": true,
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "google-trends-api": "^4.9.2"
+  }
+}
