@@ -54,6 +54,25 @@ layout: default
   }
   .back-link:hover{color:var(--clay)}
   .back-link::before{content:"←"}
+
+  .post-cta{
+    max-width:68ch;margin:0 auto 80px;
+    background:#fff;border:1px solid var(--line);border-radius:16px;
+    padding:32px;text-align:center;
+    box-shadow:0 12px 40px -12px rgba(43,51,39,.14);
+  }
+  .post-cta h3{
+    font-family:'Fraunces',serif;font-size:clamp(20px,3vw,26px);
+    color:var(--ink);margin-bottom:10px;
+  }
+  .post-cta p{color:var(--ink-soft);font-size:15px;margin-bottom:6px;line-height:1.6}
+  .post-cta .endereco{font-weight:600;color:var(--ink)}
+  .post-cta-btn{
+    display:inline-block;margin-top:18px;
+    background:var(--clay);color:#fff;font-weight:600;font-size:15px;
+    padding:14px 28px;border-radius:12px;transition:background .15s ease;
+  }
+  .post-cta-btn:hover{background:var(--clay-deep)}
 </style>
 
 <section class="post-hero">
@@ -77,4 +96,11 @@ layout: default
   <article class="post-body">
     {{ content }}
   </article>
+
+  <aside class="post-cta">
+    <h3>Estúdio Benesse Pilates</h3>
+    <p>Pilates, massagens e recovery — para mais saúde, postura e qualidade de vida.</p>
+    <p class="endereco">📍 Chácara Santo Antônio, São Paulo</p>
+    <a href="{{ site.baseurl }}/" class="post-cta-btn">Conhecer o estúdio →</a>
+  </aside>
 </div>
