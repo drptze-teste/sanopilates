@@ -1,11 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin · Benesse Blog</title>
+  <title>Admin · Blog Benesse Pilates</title>
+  <style>
+    :root {
+      --cream: #F4EFE6;
+      --ink: #2B3327;
+      --ink-soft: #56604F;
+      --sage-deep: #5E6E52;
+      --clay: #C16B43;
+      --clay-deep: #A8542F;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 24px;
+    }
+    .card {
+      max-width: 540px;
+      width: 100%;
+      background: #fff;
+      border-radius: 18px;
+      padding: 36px 32px;
+      box-shadow: 0 12px 40px rgba(43, 51, 39, 0.12);
+    }
+    h1 { font-size: 1.5rem; margin: 0 0 6px; }
+    p.sub { color: var(--ink-soft); margin: 0 0 24px; line-height: 1.5; }
+    .btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 15px 18px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      transition: transform .08s ease, opacity .15s ease;
+    }
+    .btn:active { transform: scale(.985); }
+    .btn-primary { background: var(--clay); color: #fff; }
+    .btn-primary:hover { background: var(--clay-deep); }
+    .btn-secondary { background: var(--cream); color: var(--ink); }
+    .btn-secondary:hover { background: #e7ddc9; }
+    .hint {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid #eee;
+      font-size: .9rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .hint code {
+      background: var(--cream);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: .85em;
+    }
+  </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <div class="card">
+    <h1>Painel do Blog</h1>
+    <p class="sub">Crie e edite os posts direto no GitHub — sem precisar de login extra. Os textos publicam sozinhos no site em poucos minutos.</p>
+
+    <a class="btn btn-primary" id="novo" href="#" target="_blank" rel="noopener">✍️ Escrever novo post</a>
+    <a class="btn btn-secondary" href="https://github.com/drptze-teste/sanopilates/tree/main/_posts" target="_blank" rel="noopener">📂 Ver / editar posts existentes</a>
+
+    <div class="hint">
+      <strong>Como funciona:</strong> ao clicar em "Escrever novo post", o GitHub abre um arquivo já com o modelo pronto. É só preencher o título, o resumo e o texto, e clicar em <code>Commit changes</code> embaixo. O blog atualiza sozinho.
+    </div>
+  </div>
+
+  <script>
+    // Monta o link de "novo post" com a data de hoje e o modelo de front matter pré-preenchido.
+    (function () {
+      const hoje = new Date();
+      const p = (n) => String(n).padStart(2, '0');
+      const data = `${hoje.getFullYear()}-${p(hoje.getMonth() + 1)}-${p(hoje.getDate())}`;
+      const nomeArquivo = `_posts/${data}-novo-post.md`;
+
+      const modelo = `---
+layout: post
+title: "Título do post aqui"
+date: ${data} 10:00:00 -0300
+excerpt: "Resumo de uma linha que aparece no card da listagem."
+author: "Equipe Benesse"
+---
+
+Escreva a introdução aqui (2-3 linhas).
+
+## Primeiro subtítulo
+
+Texto do primeiro tópico.
+
+## Segundo subtítulo
+
+Texto do segundo tópico.
+
+## Conclusão
+
+Parágrafo final convidando para uma aula experimental no estúdio.
+`;
+
+      const url = 'https://github.com/drptze-teste/sanopilates/new/main'
+        + '?filename=' + encodeURIComponent(nomeArquivo)
+        + '&value=' + encodeURIComponent(modelo);
+
+      document.getElementById('novo').setAttribute('href', url);
+    })();
+  </script>
 </body>
 </html>
