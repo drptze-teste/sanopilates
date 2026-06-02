@@ -124,9 +124,26 @@ excerpt: "Resumo de 1 linha"
 
 hashtags: #pilates #saude #bemestar`;
 
-  console.log('\nChamando Gemini...');
-  const result = await model.generateContent(userPrompt);
-  const conteudo = result.response.text();
+  // Chama Gemini com retry automático em caso de quota
+  async function gerarComRetry(tentativa = 1) {
+    try {
+      console.log(`\nChamando Gemini... (tentativa ${tentativa})`);
+      const result = await model.generateContent(userPrompt);
+      return result.response.text();
+    } catch (err) {
+      const isQuota = err.message && err.message.includes('quota');
+      const isRate  = err.message && (err.message.includes('429') || err.message.includes('RESOURCE_EXHAUSTED'));
+      if ((isQuota || isRate) && tentativa < 4) {
+        const espera = tentativa * 30000; // 30s, 60s, 90s
+        console.log(`Limite de quota atingido. Aguardando ${espera/1000}s antes de tentar novamente...`);
+        await new Promise(r => setTimeout(r, espera));
+        return gerarComRetry(tentativa + 1);
+      }
+      throw err;
+    }
+  }
+
+  const conteudo = await gerarComRetry();
 
   // ── Salvar ──────────────────────────────────────────────────────────────────
   const nomeArquivo = `_posts/${dataHoje}-post-semana-${String(semana).padStart(2, '0')}.md`;
