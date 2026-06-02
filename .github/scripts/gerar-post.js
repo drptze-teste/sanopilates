@@ -167,21 +167,26 @@ Regras: não use front matter YAML, não escreva "hashtags", não inclua imagens
 
   const titulo = mTitulo ? limpaAspas(mTitulo[1]) : temaDestaque;
   const resumo = mResumo ? limpaAspas(mResumo[1]) : `Novidades sobre ${temaDestaque} no Estúdio Benesse.`;
-  let corpo    = (mCorpo ? mCorpo[1] : bruto)
-    .replace(/^---[\s\S]*?---/, '')            // remove qualquer front matter que escape
-    .replace(/^\s*hashtags?:.*$/gim, '')        // remove linha de hashtags que vaze
+
+  // Corpo: usa o que vem após "CORPO:"; se o rótulo não existir, remove as
+  // linhas TITULO:/RESUMO: que o modelo possa ter deixado no começo.
+  let corpo = mCorpo ? mCorpo[1] : bruto;
+  corpo = corpo
+    .replace(/^---[\s\S]*?---/, '')              // front matter que escape
+    .replace(/^\s*TITULO:.*$/gim, '')            // rótulo TITULO vazado
+    .replace(/^\s*RESUMO:.*$/gim, '')            // rótulo RESUMO vazado
+    .replace(/^\s*CORPO:\s*$/gim, '')            // rótulo CORPO sozinho
+    .replace(/^\s*hashtags?:.*$/gim, '')         // linha de hashtags
     .trim();
 
-  // Insere as 2 fotos: a 1ª após a introdução, a 2ª antes da Conclusão
-  const blocos = corpo.split(/\n(?=## )/);
-  if (blocos.length >= 1) blocos[0] += `\n\n![${inline1.alt}](${inline1.url})`;
-  const idxConclusao = blocos.findIndex(b => /^##\s*Conclus/i.test(b));
-  if (idxConclusao > 0) {
-    blocos[idxConclusao - 1] += `\n\n![${inline2.alt}](${inline2.url})`;
-  } else if (blocos.length >= 3) {
-    blocos[blocos.length - 2] += `\n\n![${inline2.alt}](${inline2.url})`;
+  // Insere as 2 fotos com linhas em branco garantidas ao redor:
+  // 1ª foto logo antes do primeiro subtítulo (após a introdução)
+  corpo = corpo.replace(/\n#{2,3} /, `\n\n![${inline1.alt}](${inline1.url})\n\n## `);
+  // 2ª foto logo antes da Conclusão (ou do último subtítulo, como reserva)
+  if (/\n#{2,3}\s*Conclus/i.test(corpo)) {
+    corpo = corpo.replace(/\n#{2,3}\s*Conclus[^\n]*/i, (m) =>
+      `\n\n![${inline2.alt}](${inline2.url})${m}`);
   }
-  corpo = blocos.join('\n');
 
   const frontMatter = [
     '---',
