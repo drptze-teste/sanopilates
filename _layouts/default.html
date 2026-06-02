@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>{{ page.title }} · Benesse Pilates</title>
+<title>{{ page.title }} · Estúdio Benesse</title>
 <meta name="description" content="{{ page.description | default: site.description }}" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,28 +38,51 @@
 
   /* ---------- TOPBAR ---------- */
   .topbar{
-    background:var(--cream-2);
+    background:#fff;
     border-bottom:1px solid var(--line);
-    padding:16px 0;
+    padding:10px 0;
   }
   .topbar-inner{
     display:flex;align-items:center;justify-content:space-between;gap:16px;
   }
-  .brand{font-family:'Fraunces',serif;font-size:18px;font-weight:600;letter-spacing:.02em}
-  .brand span{color:var(--clay)}
+  .brand-logo{
+    display:flex;align-items:center;gap:12px;text-decoration:none;
+  }
+  .brand-logo img{
+    height:52px;width:auto;
+  }
+  .brand-logo-text{
+    display:flex;flex-direction:column;line-height:1.2;
+  }
+  .brand-logo-text strong{
+    font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--ink);
+  }
+  .brand-logo-text span{
+    font-size:12px;color:var(--ink-soft);font-weight:500;
+  }
   .nav-links{display:flex;gap:24px;font-size:14px;font-weight:600;color:var(--ink-soft)}
   .nav-links a:hover{color:var(--clay)}
   .nav-links a.active{color:var(--clay)}
+
+  @media(max-width:480px){
+    .brand-logo img{height:40px}
+    .brand-logo-text strong{font-size:15px}
+    .brand-logo-text span{display:none}
+  }
 
   /* ---------- FOOTER ---------- */
   .site-footer{
     margin-top:80px;
     padding:40px 0;
     border-top:1px solid var(--line);
-    text-align:center;
-    font-size:13px;
-    color:var(--ink-soft);
+    background:#fff;
   }
+  .site-footer-inner{
+    display:flex;flex-direction:column;align-items:center;gap:16px;
+    text-align:center;
+  }
+  .site-footer img{height:56px;width:auto;opacity:.85}
+  .site-footer p{font-size:13px;color:var(--ink-soft)}
   .site-footer a{color:var(--clay)}
 </style>
 </head>
@@ -67,7 +90,13 @@
 
 <nav class="topbar">
   <div class="wrap topbar-inner">
-    <a href="{{ site.baseurl }}/" class="brand">Benesse <span>Pilates</span></a>
+    <a href="{{ site.baseurl }}/" class="brand-logo">
+      <img src="{{ site.baseurl }}/images/logo-benesse-transparente.png" alt="Estúdio Benesse" />
+      <div class="brand-logo-text">
+        <strong>Estúdio Benesse</strong>
+        <span>Pilates, Massagens e Recovery</span>
+      </div>
+    </a>
     <div class="nav-links">
       <a href="{{ site.baseurl }}/">Início</a>
       <a href="{{ site.baseurl }}/blog/" class="{% if page.layout == 'post' or page.url contains '/blog' %}active{% endif %}">Blog</a>
@@ -78,8 +107,10 @@
 {{ content }}
 
 <footer class="site-footer">
-  <div class="wrap">
-    <p>© {{ 'now' | date: "%Y" }} Benesse Pilates · Chácara Santo Antônio, São Paulo</p>
+  <div class="wrap site-footer-inner">
+    <img src="{{ site.baseurl }}/images/logo-benesse.png" alt="Estúdio Benesse" />
+    <p>© {{ 'now' | date: "%Y" }} Estúdio Benesse · Pilates, Massagens e Recovery<br>
+    Chácara Santo Antônio, São Paulo</p>
   </div>
 </footer>
 

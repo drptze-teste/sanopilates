@@ -175,9 +175,12 @@ hashtags: #pilates #saude #bemestar`;
           console.log(conteudo.substring(0, 400));
 
           // Exporta variáveis para o próximo step
+          // Sanitiza o tema para usar como mensagem de commit (remove chars especiais)
+          const temaSanitizado = temaDestaque.replace(/[^\w\sáéíóúãõâêîôûàèìòùçÁÉÍÓÚÃÕÂÊÎÔÛÀÈÌÒÙÇ-]/g, '').trim().substring(0, 60);
+
           fs.appendFileSync(process.env.GITHUB_ENV, `NOME_ARQUIVO=${nomeArquivo}\n`);
           fs.appendFileSync(process.env.GITHUB_ENV, `SEMANA=${semana}\n`);
-          fs.appendFileSync(process.env.GITHUB_ENV, `TEMA=${temaDestaque}\n`);
+          fs.appendFileSync(process.env.GITHUB_ENV, `TEMA=${temaSanitizado}\n`);
           EOF
 
       - name: Commit e push do post
