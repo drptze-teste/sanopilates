@@ -26,6 +26,21 @@ const temasFallback = [
 ];
 const temaFallback = temasFallback[semana % temasFallback.length];
 
+// ── Galeria de fotos (Unsplash, livres) — pilates / bem-estar ───────────────
+// Variam a cada semana para os posts não ficarem repetitivos.
+const galeria = [
+  { url: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80', alt: 'Mulheres praticando Pilates no estúdio' },
+  { url: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&q=80', alt: 'Movimento consciente sobre o mat' },
+  { url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&q=80', alt: 'Alongamento e bem-estar ao entardecer' },
+  { url: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80', alt: 'Respiração e equilíbrio' },
+  { url: 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=1200&q=80', alt: 'Acessórios de Pilates e mobilidade' },
+  { url: 'https://images.unsplash.com/photo-1592432678016-e910b452f9a2?w=1200&q=80', alt: 'Tapetes de Pilates prontos para a aula' },
+];
+const n = galeria.length;
+const capa    = galeria[semana % n];
+const inline1 = galeria[(semana + 2) % n];
+const inline2 = galeria[(semana + 4) % n];
+
 // ── Buscar tendências no Google Trends (Brasil) ─────────────────────────────
 const palavrasChave = [
   'pilates',
@@ -94,20 +109,17 @@ async function main() {
     systemInstruction: 'Você é o editor de conteúdo do Blog do Estúdio BNS, um estúdio de pilates focado em saúde, bem-estar, terceira idade e qualidade de vida, localizado numa região com muitos moradores brasileiros e chineses. Escreva sempre em português brasileiro, com tom leve e acessível, como se estivesse explicando para uma amiga de 60 anos curiosa sobre saúde. Retorne APENAS o Markdown do post, sem explicações, sem texto antes ou depois.',
   });
 
-  const userPrompt = `Gere um post completo para a semana ${semana} do ano ${ano}.
+  const userPrompt = `Gere um post de blog para a semana ${semana} do ano ${ano}.
 
 O tema principal vem das buscas mais quentes do Google Brasil: **${temaDestaque}**
 Tema rotativo de apoio: ${temaFallback}
 ${contextoTrends}
 
-Use o formato abaixo (mantenha exatamente o front matter YAML no topo):
+Responda EXATAMENTE neste formato, sem nada antes nem depois:
 
----
-title: "Título do post"
-date: ${dataHoje}
-excerpt: "Resumo de 1 linha"
----
-
+TITULO: Um título chamativo (sem aspas)
+RESUMO: Um resumo de uma linha que desperta curiosidade (sem aspas)
+CORPO:
 [introdução de 2-3 linhas]
 
 ## Subtítulo 1
@@ -120,9 +132,9 @@ excerpt: "Resumo de 1 linha"
 [2-3 parágrafos]
 
 ## Conclusão
-[parágrafo final com CTA suave convidando para uma aula experimental no estúdio]
+[parágrafo final com convite suave para uma aula experimental no estúdio]
 
-hashtags: #pilates #saude #bemestar`;
+Regras: não use front matter YAML, não escreva "hashtags", não inclua imagens — eu cuido disso. Use apenas Markdown no corpo (títulos com ##, negrito com **).`;
 
   // Chama Gemini com retry automático em caso de quota
   async function gerarComRetry(tentativa = 1) {
@@ -143,7 +155,47 @@ hashtags: #pilates #saude #bemestar`;
     }
   }
 
-  const conteudo = await gerarComRetry();
+  const bruto = await gerarComRetry();
+
+  // ── Montar o post final (front matter + capa + fotos no meio) ───────────────
+  const limpaAspas = (s) => s.replace(/^["']|["']$/g, '').replace(/"/g, '').trim();
+
+  // Extrai TITULO / RESUMO / CORPO da resposta do modelo
+  const mTitulo = bruto.match(/TITULO:\s*(.+)/i);
+  const mResumo = bruto.match(/RESUMO:\s*(.+)/i);
+  const mCorpo  = bruto.match(/CORPO:\s*([\s\S]*)$/i);
+
+  const titulo = mTitulo ? limpaAspas(mTitulo[1]) : temaDestaque;
+  const resumo = mResumo ? limpaAspas(mResumo[1]) : `Novidades sobre ${temaDestaque} no Estúdio Benesse.`;
+  let corpo    = (mCorpo ? mCorpo[1] : bruto)
+    .replace(/^---[\s\S]*?---/, '')            // remove qualquer front matter que escape
+    .replace(/^\s*hashtags?:.*$/gim, '')        // remove linha de hashtags que vaze
+    .trim();
+
+  // Insere as 2 fotos: a 1ª após a introdução, a 2ª antes da Conclusão
+  const blocos = corpo.split(/\n(?=## )/);
+  if (blocos.length >= 1) blocos[0] += `\n\n![${inline1.alt}](${inline1.url})`;
+  const idxConclusao = blocos.findIndex(b => /^##\s*Conclus/i.test(b));
+  if (idxConclusao > 0) {
+    blocos[idxConclusao - 1] += `\n\n![${inline2.alt}](${inline2.url})`;
+  } else if (blocos.length >= 3) {
+    blocos[blocos.length - 2] += `\n\n![${inline2.alt}](${inline2.url})`;
+  }
+  corpo = blocos.join('\n');
+
+  const frontMatter = [
+    '---',
+    'layout: post',
+    `title: "${titulo}"`,
+    `date: ${dataHoje} 10:00:00 -0300`,
+    `excerpt: "${resumo}"`,
+    'author: "Equipe Benesse"',
+    `cover: "${capa.url}"`,
+    '---',
+    '',
+  ].join('\n');
+
+  const conteudo = `${frontMatter}\n${corpo}\n`;
 
   // ── Salvar ──────────────────────────────────────────────────────────────────
   const nomeArquivo = `_posts/${dataHoje}-post-semana-${String(semana).padStart(2, '0')}.md`;

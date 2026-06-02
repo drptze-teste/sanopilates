@@ -70,7 +70,8 @@ layout: default
 
 <div class="wrap">
   {% if page.cover %}
-  <img src="{{ page.cover | relative_url }}" alt="{{ page.title }}" class="post-cover" />
+  {% if page.cover contains '://' %}{% assign cover_url = page.cover %}{% else %}{% assign cover_url = page.cover | relative_url %}{% endif %}
+  <img src="{{ cover_url }}" alt="{{ page.title }}" class="post-cover" />
   {% endif %}
 
   <article class="post-body">
