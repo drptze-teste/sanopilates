@@ -3,16 +3,15 @@ description: "Studio de Pilates · Chácara Santo Antônio — dicas, artigos e 
 url: "https://sanopilates.com.br"
 baseurl: ""
 
-# Exclui arquivos que não são do Jekyll
+# Exclui arquivos que não precisam ser processados pelo Jekyll
 exclude:
   - "imagens e video estudio/"
   - "PROJETO-BENESSE-PILATES-STATUS.md"
   - README.md
+  - Gemfile
+  - Gemfile.lock
+  - functions/
+  - node_modules/
 
-# Configurações de post
+# Permalink dos posts
 permalink: /blog/:year/:month/:day/:title/
-paginate: 6
-paginate_path: "/blog/page:num/"
-
-plugins:
-  - jekyll-paginate
