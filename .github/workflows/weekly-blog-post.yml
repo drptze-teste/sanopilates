@@ -1,0 +1,117 @@
+name: Post Automático Semanal
+
+on:
+  schedule:
+    - cron: '0 11 * * 1'   # toda segunda-feira às 11h UTC (8h Brasília)
+  workflow_dispatch:         # permite rodar manualmente pelo GitHub
+
+permissions:
+  contents: write            # necessário para fazer commit e push
+
+jobs:
+  gerar-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependência do SDK Anthropic
+        run: npm install @anthropic-ai/sdk
+
+      - name: Gerar post com Claude
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node << 'EOF'
+          const Anthropic = require('@anthropic-ai/sdk');
+          const fs = require('fs');
+          const path = require('path');
+
+          // ── Calcular semana do ano ─────────────────────────────────────
+          const hoje = new Date();
+          const inicioAno = new Date(hoje.getFullYear(), 0, 1);
+          const semana = Math.ceil(
+            ((hoje - inicioAno) / 86400000 + inicioAno.getDay() + 1) / 7
+          );
+          const ano = hoje.getFullYear();
+
+          // Data formatada para o nome do arquivo e front matter
+          const pad = (n) => String(n).padStart(2, '0');
+          const dataHoje = `${ano}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
+
+          // ── Lista de temas rotativos ───────────────────────────────────
+          const temas = [
+            'Pilates para iniciantes',
+            'Dor nas costas — causas e como aliviar',
+            'Exercício físico depois dos 60',
+            'Postura no dia a dia',
+            'Pilates e saúde mental',
+            'Mobilidade e flexibilidade',
+            'Como dormir melhor com exercício',
+            'Pilates para quem trabalha sentado',
+          ];
+
+          const tema = temas[semana % temas.length];
+
+          console.log(`Semana: ${semana} | Ano: ${ano} | Tema: ${tema}`);
+
+          // ── Chamar a API do Claude ─────────────────────────────────────
+          const client = new Anthropic();
+
+          const systemPrompt = `Você é o editor de conteúdo do Blog do Estúdio BNS, um estúdio de pilates focado em saúde, bem-estar, terceira idade e qualidade de vida, localizado numa região com muitos moradores brasileiros e chineses. Escreva sempre em português brasileiro, com tom leve e acessível, como se estivesse explicando para uma amiga de 60 anos curiosa sobre saúde. Retorne APENAS o Markdown do post, sem explicações, sem texto antes ou depois.`;
+
+          const userPrompt = `Gere um post completo para a semana ${semana} do ano ${ano}. O tema desta semana é: ${tema}. Use o formato abaixo:
+
+          ---
+          title: "Título do post"
+          date: ${dataHoje}
+          excerpt: "Resumo de 1 linha"
+          ---
+          [introdução de 2-3 linhas]
+          ## Subtítulo 1
+          [2-3 parágrafos]
+          ## Subtítulo 2
+          [2-3 parágrafos]
+          ## Subtítulo 3
+          [2-3 parágrafos]
+          ## Conclusão
+          [parágrafo final com CTA suave para o estúdio]
+          hashtags: #pilates #saude #bemestar`;
+
+          const message = await client.messages.create({
+            model: 'claude-sonnet-4-5',
+            max_tokens: 2048,
+            messages: [
+              { role: 'user', content: userPrompt }
+            ],
+            system: systemPrompt,
+          });
+
+          const conteudo = message.content[0].text;
+
+          // ── Salvar o arquivo ───────────────────────────────────────────
+          const nomeArquivo = `_posts/${dataHoje}-post-semana-${String(semana).padStart(2, '0')}.md`;
+          fs.writeFileSync(path.join(process.cwd(), nomeArquivo), conteudo, 'utf8');
+
+          console.log(`Post salvo em: ${nomeArquivo}`);
+          console.log('--- Prévia (primeiras 300 chars) ---');
+          console.log(conteudo.substring(0, 300));
+
+          // Exporta o nome do arquivo para os próximos steps
+          fs.appendFileSync(process.env.GITHUB_ENV, `NOME_ARQUIVO=${nomeArquivo}\n`);
+          fs.appendFileSync(process.env.GITHUB_ENV, `SEMANA=${semana}\n`);
+          EOF
+
+      - name: Commit e push do post
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$NOME_ARQUIVO"
+          git commit -m "[bot] Post automático - semana $SEMANA"
+          git push
