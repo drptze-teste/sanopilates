@@ -188,6 +188,16 @@ Regras: não use front matter YAML, não escreva "hashtags", não inclua imagens
       `\n\n![${inline2.alt}](${inline2.url})${m}`);
   }
 
+  // Link interno (SEO) no meio do texto: callout antes do 2º subtítulo
+  let nTitulos = 0;
+  corpo = corpo.replace(/\n#{2,3} /g, (m) => {
+    nTitulos++;
+    if (nTitulos === 2) {
+      return `\n\n> 💡 **Na prática:** quer sentir esses benefícios no corpo? [Conheça o Estúdio Benesse Pilates](/) e agende uma aula experimental.\n${m}`;
+    }
+    return m;
+  });
+
   const frontMatter = [
     '---',
     'layout: post',
