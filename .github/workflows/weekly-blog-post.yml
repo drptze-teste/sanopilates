@@ -21,32 +21,31 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Instalar dependência do SDK Anthropic
-        run: npm install @anthropic-ai/sdk
+      - name: Instalar dependências
+        run: npm install @google/generative-ai google-trends-api
 
-      - name: Gerar post com Claude
+      - name: Buscar tendências e gerar post com Gemini
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           node << 'EOF'
-          const Anthropic = require('@anthropic-ai/sdk');
+          const googleTrends = require('google-trends-api');
+          const { GoogleGenerativeAI } = require('@google/generative-ai');
           const fs = require('fs');
           const path = require('path');
 
-          // ── Calcular semana do ano ─────────────────────────────────────
+          // ── Datas e semana ─────────────────────────────────────────────
           const hoje = new Date();
           const inicioAno = new Date(hoje.getFullYear(), 0, 1);
           const semana = Math.ceil(
             ((hoje - inicioAno) / 86400000 + inicioAno.getDay() + 1) / 7
           );
           const ano = hoje.getFullYear();
-
-          // Data formatada para o nome do arquivo e front matter
           const pad = (n) => String(n).padStart(2, '0');
           const dataHoje = `${ano}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
 
-          // ── Lista de temas rotativos ───────────────────────────────────
-          const temas = [
+          // ── Temas rotativos de fallback ────────────────────────────────
+          const temasFallback = [
             'Pilates para iniciantes',
             'Dor nas costas — causas e como aliviar',
             'Exercício físico depois dos 60',
@@ -56,56 +55,129 @@ jobs:
             'Como dormir melhor com exercício',
             'Pilates para quem trabalha sentado',
           ];
+          const temaFallback = temasFallback[semana % temasFallback.length];
 
-          const tema = temas[semana % temas.length];
+          // ── Buscar tendências no Google Trends (Brasil) ────────────────
+          const palavrasChave = [
+            'pilates',
+            'dor nas costas',
+            'emagrecimento',
+            'postura',
+            'saude no trabalho',
+            'home office saude',
+            'qualidade de vida',
+          ];
 
-          console.log(`Semana: ${semana} | Ano: ${ano} | Tema: ${tema}`);
+          async function buscarTendencias() {
+            const tendencias = [];
 
-          // ── Chamar a API do Claude ─────────────────────────────────────
-          const client = new Anthropic();
+            for (const palavra of palavrasChave) {
+              try {
+                const resultado = await googleTrends.relatedQueries({
+                  keyword: palavra,
+                  geo: 'BR',
+                  hl: 'pt-BR',
+                });
+                const dados = JSON.parse(resultado);
+                const rising = dados?.default?.rankedList?.[0]?.rankedKeyword;
+                if (rising && rising.length > 0) {
+                  // Pega as 2 queries em alta para cada palavra-chave
+                  rising.slice(0, 2).forEach(({ query, value }) => {
+                    tendencias.push({ query, value: value || 0, origem: palavra });
+                  });
+                }
+              } catch (e) {
+                console.log(`Trends indisponível para "${palavra}": ${e.message}`);
+              }
+              // Pequena pausa para não sobrecarregar a API do Google
+              await new Promise(r => setTimeout(r, 800));
+            }
 
-          const systemPrompt = `Você é o editor de conteúdo do Blog do Estúdio BNS, um estúdio de pilates focado em saúde, bem-estar, terceira idade e qualidade de vida, localizado numa região com muitos moradores brasileiros e chineses. Escreva sempre em português brasileiro, com tom leve e acessível, como se estivesse explicando para uma amiga de 60 anos curiosa sobre saúde. Retorne APENAS o Markdown do post, sem explicações, sem texto antes ou depois.`;
+            return tendencias;
+          }
 
-          const userPrompt = `Gere um post completo para a semana ${semana} do ano ${ano}. O tema desta semana é: ${tema}. Use o formato abaixo:
+          // ── Montar contexto de tendências ──────────────────────────────
+          let contextoTrends = '';
+          let temaDestaque = temaFallback;
 
-          ---
-          title: "Título do post"
-          date: ${dataHoje}
-          excerpt: "Resumo de 1 linha"
-          ---
-          [introdução de 2-3 linhas]
-          ## Subtítulo 1
-          [2-3 parágrafos]
-          ## Subtítulo 2
-          [2-3 parágrafos]
-          ## Subtítulo 3
-          [2-3 parágrafos]
-          ## Conclusão
-          [parágrafo final com CTA suave para o estúdio]
-          hashtags: #pilates #saude #bemestar`;
+          try {
+            console.log('Buscando tendências no Google Trends Brasil...');
+            const tendencias = await buscarTendencias();
 
-          const message = await client.messages.create({
-            model: 'claude-sonnet-4-5',
-            max_tokens: 2048,
-            messages: [
-              { role: 'user', content: userPrompt }
-            ],
-            system: systemPrompt,
+            if (tendencias.length > 0) {
+              // Ordena por volume e pega o top
+              tendencias.sort((a, b) => b.value - a.value);
+              const top5 = tendencias.slice(0, 5);
+
+              temaDestaque = top5[0].query;
+              contextoTrends = `\n\nTendências atuais no Google Brasil relacionadas a saúde e bem-estar (use como inspiração para tornar o post mais relevante):\n${top5.map((t, i) => `${i + 1}. "${t.query}" (relacionado a: ${t.origem})`).join('\n')}`;
+
+              console.log('Top tendências encontradas:');
+              top5.forEach(t => console.log(`  - ${t.query} (valor: ${t.value})`));
+            } else {
+              console.log('Nenhuma tendência encontrada, usando tema rotativo.');
+            }
+          } catch (e) {
+            console.log(`Erro ao buscar tendências: ${e.message}. Usando tema rotativo.`);
+          }
+
+          console.log(`\nSemana: ${semana} | Ano: ${ano}`);
+          console.log(`Tema principal: ${temaDestaque}`);
+          console.log(`Tema fallback: ${temaFallback}`);
+
+          // ── Chamar Gemini ──────────────────────────────────────────────
+          const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+          const model = genAI.getGenerativeModel({
+            model: 'gemini-1.5-flash',
+            systemInstruction: `Você é o editor de conteúdo do Blog do Estúdio BNS, um estúdio de pilates focado em saúde, bem-estar, terceira idade e qualidade de vida, localizado numa região com muitos moradores brasileiros e chineses. Escreva sempre em português brasileiro, com tom leve e acessível, como se estivesse explicando para uma amiga de 60 anos curiosa sobre saúde. Retorne APENAS o Markdown do post, sem explicações, sem texto antes ou depois.`,
           });
 
-          const conteudo = message.content[0].text;
+          const userPrompt = `Gere um post completo para a semana ${semana} do ano ${ano}.
 
-          // ── Salvar o arquivo ───────────────────────────────────────────
+O tema principal desta semana vem das buscas mais quentes do Google Brasil: **${temaDestaque}**
+Tema rotativo de apoio (pode combinar com o tema principal se fizer sentido): ${temaFallback}
+${contextoTrends}
+
+Use o formato abaixo (substitua cada seção por conteúdo real, mantenha exatamente o front matter YAML no topo):
+
+---
+title: "Título do post"
+date: ${dataHoje}
+excerpt: "Resumo de 1 linha"
+---
+
+[introdução de 2-3 linhas conectando o tema ao dia a dia do leitor]
+
+## Subtítulo 1
+[2-3 parágrafos]
+
+## Subtítulo 2
+[2-3 parágrafos]
+
+## Subtítulo 3
+[2-3 parágrafos]
+
+## Conclusão
+[parágrafo final com CTA suave convidando para uma aula experimental no estúdio]
+
+hashtags: #pilates #saude #bemestar`;
+
+          console.log('\nChamando Gemini para gerar o post...');
+          const result = await model.generateContent(userPrompt);
+          const conteudo = result.response.text();
+
+          // ── Salvar arquivo ─────────────────────────────────────────────
           const nomeArquivo = `_posts/${dataHoje}-post-semana-${String(semana).padStart(2, '0')}.md`;
           fs.writeFileSync(path.join(process.cwd(), nomeArquivo), conteudo, 'utf8');
 
-          console.log(`Post salvo em: ${nomeArquivo}`);
-          console.log('--- Prévia (primeiras 300 chars) ---');
-          console.log(conteudo.substring(0, 300));
+          console.log(`\nPost salvo em: ${nomeArquivo}`);
+          console.log('--- Prévia ---');
+          console.log(conteudo.substring(0, 400));
 
-          // Exporta o nome do arquivo para os próximos steps
+          // Exporta variáveis para o próximo step
           fs.appendFileSync(process.env.GITHUB_ENV, `NOME_ARQUIVO=${nomeArquivo}\n`);
           fs.appendFileSync(process.env.GITHUB_ENV, `SEMANA=${semana}\n`);
+          fs.appendFileSync(process.env.GITHUB_ENV, `TEMA=${temaDestaque}\n`);
           EOF
 
       - name: Commit e push do post
@@ -113,5 +185,5 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add "$NOME_ARQUIVO"
-          git commit -m "[bot] Post automático - semana $SEMANA"
+          git commit -m "[bot] Post automático - semana $SEMANA — $TEMA"
           git push
