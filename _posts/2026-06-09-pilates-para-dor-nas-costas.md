@@ -16,6 +16,8 @@ Neste guia completo, vamos mostrar:
 - ✅ 7 exercícios que você pode fazer HOJE
 - ✅ Quando procurar ajuda profissional
 
+![Mulher praticando Pilates no estúdio com instrutora](https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80)
+
 ---
 
 ## A Realidade da Dor nas Costas no Brasil
@@ -84,6 +86,8 @@ O Pilates trabalha exatamente nesses 4 pontos:
 
 ---
 
+![Movimento consciente e alongamento no mat de Pilates](https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&q=80)
+
 ## 7 Exercícios Para Dor nas Costas
 
 > ⚠️ Se você tem dor aguda ou hérnia diagnosticada, consulte um profissional antes de começar.
@@ -119,6 +123,8 @@ Sentada com pernas esticadas e braços à frente, arredonde a coluna e alongue p
 - ❌ **Desistir na semana 2** — justamente quando começa a funcionar
 
 ---
+
+![Aula de Pilates com equipamentos e atenção personalizada](https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=1200&q=80)
 
 ## Pilates em Casa vs. No Estúdio
 
