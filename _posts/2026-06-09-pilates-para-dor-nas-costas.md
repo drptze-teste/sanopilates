@@ -32,7 +32,7 @@ O pior? Muitas pessoas tentam:
 - ❌ Tomar remédio indefinidamente (mascara o problema)
 - ❌ Fazer exercícios errados (pioram ainda mais)
 
-**Aí é que entra o Pilates.**
+**Aí é que entra o Pilates.** No [Estúdio Benesse Pilates](https://sanopilates.com.br) trabalhamos exatamente isso — com turmas reduzidas e atenção individualizada para cada aluno.
 
 ---
 
@@ -56,6 +56,8 @@ O Pilates trabalha exatamente nesses 4 pontos:
 **Educação de Movimento** — você provavelmente está se movendo errado sem saber. Em 2-3 semanas de Pilates, você começa a sentar, levantar e caminhar diferente. E a dor some.
 
 **Redução de Inflamação** — exercício físico consistente libera opioides endógenos, o "analgésico natural" do seu corpo.
+
+> 💡 Acompanhe dicas diárias de movimento e bem-estar no nosso Instagram: [@benessestudiopilates](https://instagram.com/benessestudiopilates)
 
 ---
 
@@ -124,7 +126,7 @@ Sentada com pernas esticadas e braços à frente, arredonde a coluna e alongue p
 
 **No estúdio:** instrutor corrige postura em tempo real, motiva e usa equipamentos que potencializam os resultados.
 
-**Nossa recomendação:** experimente em casa com esses exercícios. Se gostar, venha ao Estúdio Benesse para uma aula experimental — nossos instrutores vão refinar sua técnica e personalizar para o seu corpo.
+**Nossa recomendação:** experimente em casa com esses exercícios. Se gostar, [conheça o Estúdio Benesse Pilates](https://sanopilates.com.br) — nossas turmas são reduzidas para garantir atenção total ao seu corpo. Siga também nosso Instagram [@benessestudiopilates](https://instagram.com/benessestudiopilates) para ver os exercícios em vídeo e acompanhar dicas semanais.
 
 ---
 
@@ -136,6 +138,6 @@ Com Pilates, você pode **eliminar a dor crônica, recuperar a mobilidade e volt
 
 **Comece com 3 dos 7 exercícios acima ainda esta semana. O seu corpo vai agradecer.**
 
-E quando quiser dar um passo além, a equipe do **Estúdio Benesse** está pronta para te receber com turmas reduzidas e atenção personalizada. Fale com a gente pelo WhatsApp! 🤍
+E quando quiser dar um passo além, a equipe do [**Estúdio Benesse Pilates**](https://sanopilates.com.br) está pronta para te receber com turmas reduzidas e atenção personalizada. Fale com a gente pelo WhatsApp! 🤍
 
 hashtags: #pilates #dornasCostas #saude #bemestar #lombalgia #pilatesparadornascostas

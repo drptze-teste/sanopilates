@@ -139,6 +139,11 @@ CORPO:
 ## Conclusão
 [Parágrafo final resumindo o benefício + convite caloroso e sem pressão para conhecer o Estúdio Benesse Pilates e agendar uma aula experimental]
 
+Links obrigatórios — insira naturalmente no texto em pelo menos 3 pontos diferentes:
+- Site: [Estúdio Benesse Pilates](https://sanopilates.com.br) — use ao mencionar o estúdio pela primeira vez e na conclusão
+- Instagram: [@benessestudiopilates](https://instagram.com/benessestudiopilates) — use em 1 dica ou callout no meio do texto
+- Exemplo de callout Instagram: > 💡 Acompanhe dicas de [tema] no nosso Instagram: [@benessestudiopilates](https://instagram.com/benessestudiopilates)
+
 Regras obrigatórias:
 - Não use front matter YAML
 - Não escreva "hashtags" nem "tags"
