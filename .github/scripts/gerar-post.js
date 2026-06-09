@@ -117,24 +117,35 @@ ${contextoTrends}
 
 Responda EXATAMENTE neste formato, sem nada antes nem depois:
 
-TITULO: Um título chamativo (sem aspas)
-RESUMO: Um resumo de uma linha que desperta curiosidade (sem aspas)
+TITULO: Título chamativo e direto com número ou promessa concreta (sem aspas)
+RESUMO: Uma frase que desperta curiosidade e resume o benefício principal (sem aspas)
 CORPO:
-[introdução de 2-3 linhas]
+[introdução de 2-3 linhas conectando o tema à realidade do leitor — use dado ou estatística se possível]
 
-## Subtítulo 1
-[2-3 parágrafos]
+---
 
-## Subtítulo 2
-[2-3 parágrafos]
+## A Realidade: [subtítulo sobre o problema ou contexto]
+[2-3 parágrafos com números, fatos ou situações do dia a dia que o leitor reconhece]
 
-## Subtítulo 3
-[2-3 parágrafos]
+## Por Que Funciona: [subtítulo sobre a solução/mecanismo]
+[2-3 parágrafos explicando como o Pilates resolve — pode usar listas com ✅ ou ❌]
+
+## Na Prática: [subtítulo com dicas, exercícios ou passo a passo]
+[2-3 parágrafos com orientações concretas e aplicáveis — use numeração ou lista]
+
+## Erros Comuns
+[3-4 erros que as pessoas cometem, no formato: ❌ **Erro X** — explicação breve + como fazer certo]
 
 ## Conclusão
-[parágrafo final com convite suave para uma aula experimental no estúdio]
+[Parágrafo final resumindo o benefício + convite caloroso e sem pressão para conhecer o Estúdio Benesse Pilates e agendar uma aula experimental]
 
-Regras: não use front matter YAML, não escreva "hashtags", não inclua imagens — eu cuido disso. Use apenas Markdown no corpo (títulos com ##, negrito com **).`;
+Regras obrigatórias:
+- Não use front matter YAML
+- Não escreva "hashtags" nem "tags"
+- Não inclua imagens (eu insiro depois)
+- Use Markdown: ## para títulos, **negrito**, *itálico*, listas com - ou números
+- Tom: leve, acessível, como explicando para uma amiga de 60 anos
+- Sempre chame o estúdio de "Estúdio Benesse Pilates" (nunca "BNS" nem "estúdio")`;
 
   // Chama Gemini com retry automático em caso de quota
   async function gerarComRetry(tentativa = 1) {
