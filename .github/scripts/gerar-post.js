@@ -14,15 +14,21 @@ const pad = (n) => String(n).padStart(2, '0');
 const dataHoje = `${ano}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
 
 // ── Temas rotativos de fallback ─────────────────────────────────────────────
+// Temas baseados em análise competitiva (Google Trends + gaps de concorrentes)
+// Ordenados por oportunidade de SEO e volume de busca
 const temasFallback = [
-  'Pilates para iniciantes',
-  'Dor nas costas — causas e como aliviar',
-  'Exercício físico depois dos 60',
-  'Postura no dia a dia',
-  'Pilates e saúde mental',
-  'Mobilidade e flexibilidade',
-  'Como dormir melhor com exercício',
-  'Pilates para quem trabalha sentado',
+  'Como o Pilates fortalece o core — e por que isso muda tudo na sua saúde',
+  'Pilates em casa: guia completo para quem está começando do zero',
+  'Longevidade e movimento: por que Pilates é a tendência fitness de 2026',
+  'Pilates para saúde mental — como o exercício reduz ansiedade e melhora o humor',
+  'Pilates clínico para hérnia de disco: funciona mesmo?',
+  'Pilates vs Yoga: qual escolher para a sua saúde?',
+  'Postura no trabalho: exercícios de Pilates para quem fica horas sentado',
+  'Mobilidade + Pilates: a combinação do momento para quem quer se mover melhor',
+  'Pilates depois dos 60: por que é a melhor escolha para saúde e qualidade de vida',
+  'Escoliose e Pilates: posso fazer? Como? O que dizem os especialistas',
+  'Pilates para atletas amadores — como melhorar performance e evitar lesões',
+  'Cinesiofobia: como o Pilates ajuda quem tem medo de se mover por causa da dor',
 ];
 const temaFallback = temasFallback[semana % temasFallback.length];
 
