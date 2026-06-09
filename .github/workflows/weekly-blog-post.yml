@@ -2,7 +2,7 @@ name: Post Automático Semanal
 
 on:
   schedule:
-    - cron: '0 11 * * 1'   # toda segunda-feira às 11h UTC (8h Brasília)
+    - cron: '0 18 * * 1'   # toda segunda-feira às 18h UTC (15h Brasília)
   workflow_dispatch:         # permite rodar manualmente pelo GitHub
 
 permissions:
