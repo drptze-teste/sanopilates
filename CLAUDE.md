@@ -47,6 +47,7 @@ Seção dedicada a depilação, limpeza de pele e massagens em `sanopilates.com.
 - **Fotos do estúdio:** `images/estetica/` (maca-zen, sala-estetica, recepcao-cafe, ambiente — já otimizadas ~1600px).
 - **Vídeos:** placeholder na landing aponta para o canal `@BenesseStudioPilates-s8n`; trocar o bloco `videos-soon` por `<iframe>` quando houver vídeos.
 - **WhatsApp:** `5511920000821` (mesmo da home).
+- **App de agendamento:** `https://cadastroestudiobenesse.web.app/` — botão "Agendar pelo app" no hero e na barra sticky da landing de estética (variável `agendaApp`).
 - Decap CMS tem 2 coleções: "Posts do Blog" (Pilates) e "Posts de Estética & Bem-Estar".
 - **Automação:** `.github/workflows/weekly-estetica-post.yml` roda **quinta 18h UTC (15h Brasília)** e executa `.github/scripts/gerar-post-estetica.js` — mesma lógica do Pilates (Google Trends + anti-repetição + fotos Unsplash por tema), mas com temas de beleza, fotos-base `spa` e saída em `estetica-e-bem-estar/_posts/`. Fallback de fotos = fotos reais do estúdio. Reusa os mesmos secrets.
 
