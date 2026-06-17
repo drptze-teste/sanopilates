@@ -1,0 +1,13 @@
+{%- comment -%}
+Formata uma data em português.
+Uso: {% include data_pt.html date=page.date %}              → 17 de junho de 2026
+     {% include data_pt.html date=post.date abbr=true %}    → 17 jun 2026
+{%- endcomment -%}
+{%- assign _m = include.date | date: "%m" | plus: 0 | minus: 1 -%}
+{%- if include.abbr -%}
+{%- assign _meses = "jan,fev,mar,abr,mai,jun,jul,ago,set,out,nov,dez" | split: "," -%}
+{{- include.date | date: "%d" }} {{ _meses[_m] }} {{ include.date | date: "%Y" -}}
+{%- else -%}
+{%- assign _meses = "janeiro,fevereiro,março,abril,maio,junho,julho,agosto,setembro,outubro,novembro,dezembro" | split: "," -%}
+{{- include.date | date: "%-d" }} de {{ _meses[_m] }} de {{ include.date | date: "%Y" -}}
+{%- endif -%}

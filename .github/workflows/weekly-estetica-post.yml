@@ -1,0 +1,65 @@
+name: Post Automático Semanal — Estética
+
+on:
+  schedule:
+    - cron: '0 18 * * 4'   # toda quinta-feira às 18h UTC (15h Brasília)
+  workflow_dispatch:         # permite rodar manualmente pelo GitHub
+
+permissions:
+  contents: write
+
+jobs:
+  gerar-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm install @google/generative-ai google-trends-api
+        working-directory: .github/scripts
+
+      - name: Gerar post de estética com Gemini + Google Trends
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+        run: node .github/scripts/gerar-post-estetica.js
+
+      - name: Commit e push do post
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$NOME_ARQUIVO"
+          git commit -m "[bot] Post estética - semana $SEMANA — $TEMA"
+          git push
+
+      - name: Avisar no WhatsApp (CallMeBot) — legenda pronta para o Status
+        if: success()
+        env:
+          PHONE:  ${{ secrets.WHATSAPP_PHONE }}
+          APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
+        run: |
+          if [ -z "$PHONE" ] || [ -z "$APIKEY" ]; then
+            echo "WHATSAPP_PHONE ou CALLMEBOT_APIKEY não configurados — pulando aviso."
+            exit 0
+          fi
+          MENSAGEM="💆 Novidade no blog de Estética & Bem-Estar do Estúdio Benesse!
+
+✨ $TITULO
+
+👉 Leia agora: $POST_URL
+
+Depilação, limpeza de pele, massagens e autocuidado. 🤍
+📍 Chácara Santo Antônio, SP
+📲 @benessestudiopilates"
+          curl -s -G "https://api.callmebot.com/whatsapp.php" \
+            --data-urlencode "phone=$PHONE" \
+            --data-urlencode "text=$MENSAGEM" \
+            --data-urlencode "apikey=$APIKEY"
+          echo "Aviso de WhatsApp enviado (legenda pronta para o Status)."

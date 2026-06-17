@@ -90,7 +90,7 @@ layout: default
     <p class="post-kicker">{% if is_estetica %}Estética &amp; Bem-Estar{% else %}Benesse Blog{% endif %}</p>
     <h1 class="post-title">{{ page.title }}</h1>
     <p class="post-meta">
-      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d de %B de %Y" }}</time>
+      <time datetime="{{ page.date | date_to_xmlschema }}">{% include data_pt.html date=page.date %}</time>
       {% if page.author %} · {{ page.author }}{% endif %}
       <span class="post-views" id="post-views" style="display:none">👁️ <span id="view-count">—</span></span>
     </p>

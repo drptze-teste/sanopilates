@@ -48,6 +48,13 @@ Seção dedicada a depilação, limpeza de pele e massagens em `sanopilates.com.
 - **Vídeos:** placeholder na landing aponta para o canal `@BenesseStudioPilates-s8n`; trocar o bloco `videos-soon` por `<iframe>` quando houver vídeos.
 - **WhatsApp:** `5511920000821` (mesmo da home).
 - Decap CMS tem 2 coleções: "Posts do Blog" (Pilates) e "Posts de Estética & Bem-Estar".
+- **Automação:** `.github/workflows/weekly-estetica-post.yml` roda **quinta 18h UTC (15h Brasília)** e executa `.github/scripts/gerar-post-estetica.js` — mesma lógica do Pilates (Google Trends + anti-repetição + fotos Unsplash por tema), mas com temas de beleza, fotos-base `spa` e saída em `estetica-e-bem-estar/_posts/`. Fallback de fotos = fotos reais do estúdio. Reusa os mesmos secrets.
+
+## Datas em português
+- Include `_includes/data_pt.html` formata datas em pt-BR (Jekyll/GitHub Pages não traduz `%B`).
+  - `{% include data_pt.html date=page.date %}` → "17 de junho de 2026"
+  - `{% include data_pt.html date=post.date abbr=true %}` → "17 jun 2026"
+  - Usado em `post.html` e nas duas listagens de blog.
 
 ## Convenções / armadilhas
 - **Decap CMS:** o `<script>` do Decap deve ficar no **fim do `<body>`**, nunca no `<head>`.
