@@ -35,20 +35,20 @@ Posts publicados **automaticamente toda semana** por IA. Serve de **template** p
   - Privacidade: sem cookies, sem IP armazenado, sem aviso LGPD. Conta visitantes únicos/dia.
   - Painel: **https://sanopilates.goatcounter.com** (requer conta gratuita com o código `sanopilates`).
   - Para trocar o site: editar `data-goatcounter` no layout. **Conta correta: `sanopilates`** (não `benesseblogpilates`).
-  - **Contador visível por post:** `post.html` consome o endpoint público `https://sanopilates.goatcounter.com/counter/<path>.json`. Exige habilitar o "visitor counter" em GoatCounter → Settings.
+  - **Contador visível por post:** `post.html` consome o endpoint público `https://sanopilates.goatcounter.com/counter/<path>.json` e mostra 👁️ ao lado da data. Lê `count_unique` (visitantes únicos ≈ IP). Requer a opção **"Allow adding visitor counts on your website"** habilitada em GoatCounter → Settings (**já habilitada**).
 - Para postar manualmente: criar `.md` em `_posts/` (`AAAA-MM-DD-titulo.md` com front matter) e push.
 
 ## Estética & Bem-Estar (segunda seção, mesmo domínio)
 Seção dedicada a depilação, limpeza de pele e massagens em `sanopilates.com.br/estetica-e-bem-estar/`.
-- **Landing:** `estetica-e-bem-estar/index.html` (hero + serviços + galeria com lightbox + vídeos YouTube + cross-link Pilates + CTA WhatsApp).
+- **Landing:** `estetica-e-bem-estar/index.html` (hero + serviços + galeria com lightbox + vídeos + seção "Do nosso blog" + cross-link Pilates). CTA primário **"Agendar pelo app"** e WhatsApp secundário, no hero e na barra sticky mobile.
 - **Blog:** `estetica-e-bem-estar/blog/index.html`; posts em `estetica-e-bem-estar/_posts/`.
 - **Como funciona a separação:** posts em subpasta `_posts` ganham a categoria `estetica-e-bem-estar` (comportamento padrão do Jekyll). O permalink em `_config.yml` é `/:categories/blog/:year/:month/:day/:title/` → posts de Pilates (sem categoria) ficam em `/blog/...` e os de estética em `/estetica-e-bem-estar/blog/...`.
 - **Filtros das listagens:** blog Pilates usa `where_exp post.categories == empty`; blog Estética usa `site.categories['estetica-e-bem-estar']`.
 - **Tema visual:** `default.html` adiciona a classe `theme-estetica` ao `<body>` quando a URL/categoria é de estética, remapeando `--clay`/`--sage-deep` para tons rose (`--rose #C7678A`, `--gold`, `--lavender`). Assim `post.html` e a listagem recolorem sozinhos.
 - **Fotos do estúdio:** `images/estetica/` (maca-zen, sala-estetica, recepcao-cafe, ambiente — já otimizadas ~1600px).
-- **Vídeos:** placeholder na landing aponta para o canal `@BenesseStudioPilates-s8n`; trocar o bloco `videos-soon` por `<iframe>` quando houver vídeos.
+- **Vídeos:** ⏳ PENDENTE — placeholder na landing (bloco `videos-soon`) aponta para o canal `@BenesseStudioPilates-s8n`. Quando o dono enviar os links (YouTube/TikTok/Instagram, pode misturar), trocar o bloco por embeds em grid (`.video-embed` com `<iframe>`). TikTok/Instagram exigem o script de embed da plataforma.
 - **WhatsApp:** `5511920000821` (mesmo da home).
-- **App de agendamento:** `https://cadastroestudiobenesse.web.app/` — botão "Agendar pelo app" no hero e na barra sticky da landing de estética (variável `agendaApp`).
+- **App de agendamento:** `https://cadastroestudiobenesse.web.app/` (variável `agendaApp` na landing). Botão "Agendar pelo app" no hero, na barra sticky, nos 3 cards de serviço e no rodapé (`post-cta`) dos posts de estética. WhatsApp fica como ação secundária.
 - Decap CMS tem 2 coleções: "Posts do Blog" (Pilates) e "Posts de Estética & Bem-Estar".
 - **Automação:** `.github/workflows/weekly-estetica-post.yml` roda **quinta 18h UTC (15h Brasília)** e executa `.github/scripts/gerar-post-estetica.js` — mesma lógica do Pilates (Google Trends + anti-repetição + fotos Unsplash por tema), mas com temas de beleza, fotos-base `spa` e saída em `estetica-e-bem-estar/_posts/`. Fallback de fotos = fotos reais do estúdio. Reusa os mesmos secrets.
 
