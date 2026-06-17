@@ -28,6 +28,13 @@ Posts publicados **automaticamente toda semana** por IA. Serve de **template** p
   - Requer secrets do GitHub: `GEMINI_API_KEY` (obrigatório) e `UNSPLASH_ACCESS_KEY` (opcional — fotos dinâmicas por tema; sem ela usa 3 fotos genéricas de fallback).
   - `UNSPLASH_ACCESS_KEY`: app gratuito em https://unsplash.com/developers → copiar o **Access Key**.
   - **Anti-repetição:** o script lê os títulos dos 3 últimos posts e escolhe o 1º tema candidato (tendência ou fallback) que não repita o assunto recente — evita semanas seguidas sobre o mesmo tópico.
+  - **Aviso WhatsApp:** o step final do workflow manda via CallMeBot uma legenda pronta (título + link + @) para o dono colar no Status do WhatsApp. WhatsApp **não tem API de Status** — postar é sempre manual.
+
+## Analytics
+- **Contador de acessos:** GoatCounter (script no fim do `<body>` de `_layouts/default.html`).
+  - Privacidade: sem cookies, sem IP armazenado, sem aviso LGPD. Conta visitantes únicos/dia.
+  - Painel: **https://sanopilates.goatcounter.com** (requer conta gratuita com o código `sanopilates`).
+  - Para trocar o site: editar `data-goatcounter` no layout.
 - Para postar manualmente: criar `.md` em `_posts/` (`AAAA-MM-DD-titulo.md` com front matter) e push.
 
 ## Convenções / armadilhas
