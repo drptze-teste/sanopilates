@@ -14,4 +14,7 @@ exclude:
   - node_modules/
 
 # Permalink dos posts
-permalink: /blog/:year/:month/:day/:title/
+# Posts em _posts/ (Pilates, sem categoria) → /blog/AAAA/MM/DD/titulo/
+# Posts em estetica-e-bem-estar/_posts/ (categoria 'estetica-e-bem-estar') →
+#   /estetica-e-bem-estar/blog/AAAA/MM/DD/titulo/
+permalink: /:categories/blog/:year/:month/:day/:title/

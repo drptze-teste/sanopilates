@@ -82,10 +82,12 @@ layout: default
   .post-cta-links a:hover{color:var(--clay);text-decoration:underline}
 </style>
 
+{% assign is_estetica = false %}
+{% if page.categories contains 'estetica-e-bem-estar' %}{% assign is_estetica = true %}{% endif %}
 <section class="post-hero">
   <div class="wrap">
-    <a href="{{ site.baseurl }}/blog/" class="back-link">Voltar ao Blog</a>
-    <p class="post-kicker">Benesse Blog</p>
+    <a href="{% if is_estetica %}{{ site.baseurl }}/estetica-e-bem-estar/blog/{% else %}{{ site.baseurl }}/blog/{% endif %}" class="back-link">Voltar ao Blog</a>
+    <p class="post-kicker">{% if is_estetica %}Estética &amp; Bem-Estar{% else %}Benesse Blog{% endif %}</p>
     <h1 class="post-title">{{ page.title }}</h1>
     <p class="post-meta">
       <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d de %B de %Y" }}</time>
@@ -105,6 +107,19 @@ layout: default
     {{ content }}
   </article>
 
+  {% if is_estetica %}
+  <aside class="post-cta">
+    <h3>Estúdio Benesse · Estética &amp; Bem-Estar</h3>
+    <p>Depilação, limpeza de pele, massagens e recovery — autocuidado num ambiente acolhedor.</p>
+    <p class="endereco">📍 Chácara Santo Antônio, São Paulo</p>
+    <a href="https://wa.me/5511920000821?text=Ol%C3%A1%21%20Vim%20pelo%20blog%20e%20quero%20agendar%20um%20hor%C3%A1rio%20de%20Est%C3%A9tica%20%26%20Bem-Estar" target="_blank" rel="noopener" class="post-cta-btn">Agendar pelo WhatsApp →</a>
+    <p class="post-cta-links">
+      <a href="{{ site.baseurl }}/estetica-e-bem-estar/">Estética &amp; Bem-Estar</a> ·
+      <a href="{{ site.baseurl }}/">Pilates</a> ·
+      <a href="https://www.instagram.com/benessestudiopilates" target="_blank" rel="noopener">Instagram</a>
+    </p>
+  </aside>
+  {% else %}
   <aside class="post-cta">
     <h3>Estúdio Benesse Pilates</h3>
     <p>Pilates, massagens e recovery — para mais saúde, postura e qualidade de vida.</p>
@@ -116,6 +131,7 @@ layout: default
       <a href="https://www.instagram.com/benessestudiopilates" target="_blank" rel="noopener">Instagram</a>
     </p>
   </aside>
+  {% endif %}
 </div>
 
 <script>

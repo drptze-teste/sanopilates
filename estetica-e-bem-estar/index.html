@@ -1,0 +1,303 @@
+---
+layout: default
+title: "Estética & Bem-Estar"
+description: "Depilação, limpeza de pele, massagens e recovery no Estúdio Benesse — autocuidado num ambiente acolhedor na Chácara Santo Antônio, São Paulo."
+---
+<style>
+  /* ===== HERO ===== */
+  .est-hero{
+    position:relative;
+    min-height:clamp(420px,62vh,560px);
+    display:flex;align-items:center;
+    color:#fff;
+    overflow:hidden;
+  }
+  .est-hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(110deg,rgba(80,30,55,.78) 0%,rgba(80,30,55,.35) 55%,rgba(80,30,55,.15) 100%),
+      url('{{ site.baseurl }}/images/estetica/maca-zen.jpg') center/cover no-repeat;
+    z-index:0;
+  }
+  .est-hero .wrap{position:relative;z-index:1;width:100%}
+  .est-hero-kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:#FBE7D8;margin-bottom:16px;
+  }
+  .est-hero-kicker::before{content:"";width:28px;height:2px;background:var(--gold)}
+  .est-hero h1{
+    font-size:clamp(32px,6vw,60px);line-height:1.05;margin-bottom:18px;
+    max-width:18ch;color:#fff;
+  }
+  .est-hero h1 em{font-style:italic;color:var(--gold)}
+  .est-hero p{font-size:clamp(16px,2.2vw,20px);max-width:46ch;margin-bottom:28px;color:#F3E9E9}
+  .btn-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--rose);color:#fff;font-weight:700;font-size:16px;
+    padding:15px 30px;border-radius:14px;
+    box-shadow:0 12px 30px -8px rgba(168,78,115,.6);
+    transition:transform .15s ease,background .15s ease;
+  }
+  .btn-primary:hover{background:var(--rose-deep);transform:translateY(-2px)}
+  .btn-primary svg{width:20px;height:20px}
+
+  /* ===== SECTION BASE ===== */
+  .est-section{padding:clamp(56px,8vw,96px) 0}
+  .est-section-head{text-align:center;max-width:60ch;margin:0 auto clamp(36px,5vw,56px)}
+  .est-section-kicker{
+    display:inline-block;font-size:13px;font-weight:700;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--rose);margin-bottom:12px;
+  }
+  .est-section-head h2{font-size:clamp(26px,4vw,40px);margin-bottom:14px;color:var(--ink)}
+  .est-section-head p{font-size:clamp(15px,1.8vw,17px);color:var(--ink-soft)}
+
+  /* ===== SERVIÇOS ===== */
+  .est-services{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px}
+  .service-card{
+    background:#fff;border:1px solid var(--line);border-radius:18px;
+    padding:34px 28px;text-align:center;
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .service-card:hover{transform:translateY(-4px);box-shadow:0 18px 44px -16px rgba(120,60,90,.22)}
+  .service-icon{
+    width:64px;height:64px;margin:0 auto 18px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;background:var(--lavender);
+  }
+  .service-icon svg{width:32px;height:32px;stroke:var(--rose-deep)}
+  .service-card h3{font-size:22px;margin-bottom:10px;color:var(--ink)}
+  .service-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.65;margin-bottom:18px}
+  .service-link{
+    font-size:13px;font-weight:700;color:var(--rose);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .service-link::after{content:"→";transition:transform .15s}
+  .service-link:hover::after{transform:translateX(4px)}
+
+  /* ===== GALERIA ===== */
+  .est-gallery-wrap{background:var(--cream-2)}
+  .est-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .gallery-item{
+    position:relative;border-radius:14px;overflow:hidden;cursor:pointer;
+    aspect-ratio:4/3;background:var(--cream);
+  }
+  .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  .gallery-item:hover img{transform:scale(1.06)}
+  .gallery-item::after{
+    content:"⊕";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    font-size:36px;color:#fff;background:rgba(80,30,55,.0);
+    opacity:0;transition:.25s ease;
+  }
+  .gallery-item:hover::after{background:rgba(80,30,55,.32);opacity:1}
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox{
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(40,15,28,.92);
+    display:none;align-items:center;justify-content:center;padding:24px;
+  }
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .lightbox-close{
+    position:absolute;top:20px;right:26px;
+    font-size:38px;color:#fff;cursor:pointer;line-height:1;
+    background:none;border:none;
+  }
+
+  /* ===== VÍDEOS ===== */
+  .est-videos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+  .video-embed{
+    position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;
+    background:#000;box-shadow:0 12px 32px -14px rgba(120,60,90,.3);
+  }
+  .video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .videos-soon{
+    grid-column:1/-1;text-align:center;
+    background:#fff;border:1px dashed var(--rose);border-radius:18px;
+    padding:48px 28px;color:var(--ink-soft);
+  }
+  .videos-soon h3{color:var(--ink);font-size:22px;margin-bottom:8px}
+
+  /* ===== PILATES CROSS-LINK ===== */
+  .est-cross{background:var(--lavender)}
+  .est-cross .wrap{
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;
+    padding:clamp(40px,6vw,64px) 24px;
+  }
+  .est-cross-text{max-width:48ch}
+  .est-cross-text h2{font-size:clamp(24px,3.4vw,34px);color:var(--ink);margin-bottom:10px}
+  .est-cross-text p{color:var(--ink-soft);font-size:16px}
+  .btn-outline{
+    display:inline-flex;align-items:center;gap:8px;flex-shrink:0;
+    background:#fff;color:var(--rose-deep);font-weight:700;font-size:15px;
+    padding:14px 26px;border-radius:12px;border:1.5px solid var(--rose);
+    transition:background .15s ease,color .15s ease;
+  }
+  .btn-outline:hover{background:var(--rose);color:#fff}
+
+  /* ===== STICKY CTA (mobile) ===== */
+  .sticky-cta{
+    position:fixed;left:0;right:0;bottom:0;z-index:900;
+    display:none;padding:12px 16px;
+    background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+    border-top:1px solid var(--line);
+  }
+  .sticky-cta a{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    background:var(--rose);color:#fff;font-weight:700;font-size:16px;
+    padding:14px;border-radius:12px;
+  }
+  @media(max-width:720px){
+    .sticky-cta{display:block}
+    body{padding-bottom:76px}
+    .est-cross .wrap{flex-direction:column;text-align:center}
+  }
+</style>
+
+{% assign wa = "https://wa.me/5511920000821" %}
+
+<!-- ===== HERO ===== -->
+<section class="est-hero">
+  <div class="wrap">
+    <p class="est-hero-kicker">Estética &amp; Bem-Estar</p>
+    <h1>Seu momento de <em>cuidar de você</em></h1>
+    <p>Depilação, limpeza de pele, massagens e recovery — num ambiente acolhedor, com atendimento personalizado.</p>
+    <a href="{{ wa }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20agendar%20um%20hor%C3%A1rio%20de%20Est%C3%A9tica%20%26%20Bem-Estar" target="_blank" rel="noopener" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.512 5.26l-.999 3.648 3.736-.979zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      Agendar pelo WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- ===== SERVIÇOS ===== -->
+<section class="est-section">
+  <div class="wrap">
+    <div class="est-section-head">
+      <span class="est-section-kicker">O que oferecemos</span>
+      <h2>Serviços pensados para o seu bem-estar</h2>
+      <p>Cada atendimento é individual, num espaço reservado e tranquilo. Atendemos todos os públicos com o mesmo carinho.</p>
+    </div>
+    <div class="est-services">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M5 8c0-2 2-4 7-4s7 2 7 4"/><path d="M5 8c0 6 3 9 7 9s7-3 7-9"/></svg>
+        </div>
+        <h3>Depilação</h3>
+        <p>Técnica higiênica e cuidadosa para pernas, axilas, virilha e rosto. Pele lisa e macia por muito mais tempo.</p>
+        <a href="{{ wa }}?text=Ol%C3%A1%21%20Quero%20saber%20mais%20sobre%20Depila%C3%A7%C3%A3o" target="_blank" rel="noopener" class="service-link">Agendar</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01"/><path d="M9 15c.8.7 1.9 1 3 1s2.2-.3 3-1"/></svg>
+        </div>
+        <h3>Limpeza de Pele</h3>
+        <p>Limpeza profunda com vaporização, extração e máscara. Renova a pele, controla a oleosidade e devolve o viço.</p>
+        <a href="{{ wa }}?text=Ol%C3%A1%21%20Quero%20saber%20mais%20sobre%20Limpeza%20de%20Pele" target="_blank" rel="noopener" class="service-link">Agendar</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c3-4 6-4 9 0s6 4 9 0"/><path d="M3 17c3-4 6-4 9 0s6 4 9 0"/></svg>
+        </div>
+        <h3>Massagens &amp; Recovery</h3>
+        <p>Massagem relaxante, modeladora e liberação de tensões. Mais circulação, alívio do estresse e sensação de leveza.</p>
+        <a href="{{ wa }}?text=Ol%C3%A1%21%20Quero%20saber%20mais%20sobre%20Massagens%20e%20Recovery" target="_blank" rel="noopener" class="service-link">Agendar</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALERIA ===== -->
+<section class="est-section est-gallery-wrap">
+  <div class="wrap">
+    <div class="est-section-head">
+      <span class="est-section-kicker">Nosso espaço</span>
+      <h2>Um ambiente feito para relaxar</h2>
+      <p>Salas reservadas, aconchegantes e preparadas para o seu conforto. Conheça por dentro.</p>
+    </div>
+    <div class="est-gallery">
+      <div class="gallery-item" data-full="{{ site.baseurl }}/images/estetica/maca-zen.jpg">
+        <img src="{{ site.baseurl }}/images/estetica/maca-zen.jpg" alt="Sala de massagem com ambiente zen" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-full="{{ site.baseurl }}/images/estetica/sala-estetica.jpg">
+        <img src="{{ site.baseurl }}/images/estetica/sala-estetica.jpg" alt="Sala de estética com maca e equipamentos" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-full="{{ site.baseurl }}/images/estetica/recepcao-cafe.jpg">
+        <img src="{{ site.baseurl }}/images/estetica/recepcao-cafe.jpg" alt="Recepção com espaço de café" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-full="{{ site.baseurl }}/images/estetica/ambiente.jpg">
+        <img src="{{ site.baseurl }}/images/estetica/ambiente.jpg" alt="Ambiente do estúdio Benesse" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VÍDEOS ===== -->
+<section class="est-section">
+  <div class="wrap">
+    <div class="est-section-head">
+      <span class="est-section-kicker">No nosso canal</span>
+      <h2>Veja tratamentos e dicas em vídeo</h2>
+      <p>Acompanhe os conteúdos do Estúdio Benesse no YouTube.</p>
+    </div>
+    <div class="est-videos">
+      <!-- VÍDEOS DO YOUTUBE:
+           Quando tiver os vídeos publicados, troque este bloco "videos-soon"
+           por um ou mais embeds neste formato (copie o ID do vídeo da URL):
+           <div class="video-embed"><iframe src="https://www.youtube.com/embed/VIDEO_ID"
+             title="..." allowfullscreen></iframe></div>
+      -->
+      <div class="videos-soon">
+        <h3>Conteúdos em breve 🎬</h3>
+        <p>Estamos preparando vídeos de tratamentos e dicas de autocuidado.<br>Enquanto isso, conheça nosso canal:</p>
+        <p style="margin-top:18px">
+          <a href="https://www.youtube.com/@BenesseStudioPilates-s8n" target="_blank" rel="noopener" class="btn-outline">▶ Visitar canal no YouTube</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CROSS-LINK PILATES ===== -->
+<section class="est-cross">
+  <div class="wrap">
+    <div class="est-cross-text">
+      <h2>Complemente com o Pilates</h2>
+      <p>Cuidar da pele e do corpo combina com movimento. Conheça também nosso estúdio de Pilates — saúde, postura e qualidade de vida.</p>
+    </div>
+    <a href="{{ site.baseurl }}/" class="btn-outline">Conhecer o Pilates →</a>
+  </div>
+</section>
+
+<!-- ===== STICKY CTA (mobile) ===== -->
+<div class="sticky-cta">
+  <a href="{{ wa }}?text=Ol%C3%A1%21%20Vim%20pelo%20site%20e%20quero%20agendar%20um%20hor%C3%A1rio%20de%20Est%C3%A9tica%20%26%20Bem-Estar" target="_blank" rel="noopener">📲 Agendar pelo WhatsApp</a>
+</div>
+
+<!-- ===== LIGHTBOX ===== -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" aria-label="Fechar">&times;</button>
+  <img src="" alt="" id="lightbox-img" />
+</div>
+
+<script>
+(function(){
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('.gallery-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      lbImg.src = item.getAttribute('data-full');
+      lbImg.alt = item.querySelector('img').alt;
+      lb.classList.add('open');
+    });
+  });
+  function close(){ lb.classList.remove('open'); lbImg.src=''; }
+  lb.addEventListener('click', function(e){ if(e.target !== lbImg) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+})();
+</script>

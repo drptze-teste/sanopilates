@@ -37,6 +37,18 @@ Posts publicados **automaticamente toda semana** por IA. Serve de **template** p
   - Para trocar o site: editar `data-goatcounter` no layout.
 - Para postar manualmente: criar `.md` em `_posts/` (`AAAA-MM-DD-titulo.md` com front matter) e push.
 
+## Estética & Bem-Estar (segunda seção, mesmo domínio)
+Seção dedicada a depilação, limpeza de pele e massagens em `sanopilates.com.br/estetica-e-bem-estar/`.
+- **Landing:** `estetica-e-bem-estar/index.html` (hero + serviços + galeria com lightbox + vídeos YouTube + cross-link Pilates + CTA WhatsApp).
+- **Blog:** `estetica-e-bem-estar/blog/index.html`; posts em `estetica-e-bem-estar/_posts/`.
+- **Como funciona a separação:** posts em subpasta `_posts` ganham a categoria `estetica-e-bem-estar` (comportamento padrão do Jekyll). O permalink em `_config.yml` é `/:categories/blog/:year/:month/:day/:title/` → posts de Pilates (sem categoria) ficam em `/blog/...` e os de estética em `/estetica-e-bem-estar/blog/...`.
+- **Filtros das listagens:** blog Pilates usa `where_exp post.categories == empty`; blog Estética usa `site.categories['estetica-e-bem-estar']`.
+- **Tema visual:** `default.html` adiciona a classe `theme-estetica` ao `<body>` quando a URL/categoria é de estética, remapeando `--clay`/`--sage-deep` para tons rose (`--rose #C7678A`, `--gold`, `--lavender`). Assim `post.html` e a listagem recolorem sozinhos.
+- **Fotos do estúdio:** `images/estetica/` (maca-zen, sala-estetica, recepcao-cafe, ambiente — já otimizadas ~1600px).
+- **Vídeos:** placeholder na landing aponta para o canal `@BenesseStudioPilates-s8n`; trocar o bloco `videos-soon` por `<iframe>` quando houver vídeos.
+- **WhatsApp:** `5511920000821` (mesmo da home).
+- Decap CMS tem 2 coleções: "Posts do Blog" (Pilates) e "Posts de Estética & Bem-Estar".
+
 ## Convenções / armadilhas
 - **Decap CMS:** o `<script>` do Decap deve ficar no **fim do `<body>`**, nunca no `<head>`.
 - **Não apagar o `CNAME`** — é o que mantém o domínio `sanopilates.com.br` apontando para o Pages.

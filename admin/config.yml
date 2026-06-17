@@ -60,3 +60,52 @@ collections:
       - label: "Conteúdo"
         name: "body"
         widget: "markdown"
+
+  - name: "estetica-posts"
+    label: "Posts de Estética & Bem-Estar"
+    label_singular: "Post de Estética"
+    folder: "estetica-e-bem-estar/_posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    preview_path: "estetica-e-bem-estar/blog/{{year}}/{{month}}/{{day}}/{{slug}}/"
+    media_folder: "/images/estetica/blog"
+    public_folder: "/images/estetica/blog"
+    fields:
+      - label: "Título"
+        name: "title"
+        widget: "string"
+        hint: "Título do post — aparece no card e no topo do artigo"
+
+      - label: "Layout"
+        name: "layout"
+        widget: "hidden"
+        default: "post"
+
+      - label: "Data de publicação"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD HH:mm:ss ZZ"
+        date_format: "DD/MM/YYYY"
+        time_format: "HH:mm"
+
+      - label: "Resumo"
+        name: "excerpt"
+        widget: "text"
+        hint: "Uma frase que aparece no card da listagem (max ~160 caracteres)"
+        required: false
+
+      - label: "Autor"
+        name: "author"
+        widget: "string"
+        default: "Equipe Benesse"
+        required: false
+
+      - label: "Imagem de capa"
+        name: "cover"
+        widget: "image"
+        required: false
+        hint: "Aparece no topo do post e no card da listagem (recomendado: 1200×630 px)"
+
+      - label: "Conteúdo"
+        name: "body"
+        widget: "markdown"

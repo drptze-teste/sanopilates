@@ -1,14 +1,14 @@
 ---
 layout: default
-title: "Blog"
-description: "Dicas de Pilates, bem-estar e novidades do estúdio."
+title: "Blog de Estética & Bem-Estar"
+description: "Dicas de beleza, cuidados com a pele, depilação, massagens e autocuidado."
 ---
 <style>
   .blog-hero{
     padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px);
     background:
-      radial-gradient(120% 90% at 88% -10%,rgba(124,139,111,.22),transparent 60%),
-      radial-gradient(90% 70% at -10% 110%,rgba(193,107,67,.12),transparent 55%),
+      radial-gradient(120% 90% at 88% -10%,rgba(199,103,138,.20),transparent 60%),
+      radial-gradient(90% 70% at -10% 110%,rgba(201,154,63,.12),transparent 55%),
       var(--cream);
   }
   .blog-kicker{
@@ -36,7 +36,7 @@ description: "Dicas de Pilates, bem-estar e novidades do estúdio."
   }
   .post-card:hover{
     transform:translateY(-4px);
-    box-shadow:0 16px 40px -12px rgba(43,51,39,.16);
+    box-shadow:0 16px 40px -12px rgba(120,60,90,.16);
   }
   .post-card-cover{
     width:100%;height:200px;object-fit:cover;display:block;
@@ -44,9 +44,9 @@ description: "Dicas de Pilates, bem-estar e novidades do estúdio."
   }
   .post-card-cover-placeholder{
     width:100%;height:200px;
-    background:linear-gradient(135deg,var(--cream-2),var(--sage) 200%);
+    background:linear-gradient(135deg,var(--lavender),var(--rose) 200%);
     display:flex;align-items:center;justify-content:center;
-    font-family:'Fraunces',serif;font-size:48px;color:rgba(255,255,255,.4);
+    font-family:'Fraunces',serif;font-size:48px;color:rgba(255,255,255,.5);
   }
   .post-card-body{padding:24px}
   .post-card-date{font-size:12px;font-weight:600;color:var(--sage-deep);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
@@ -69,16 +69,15 @@ description: "Dicas de Pilates, bem-estar e novidades do estúdio."
 
 <section class="blog-hero">
   <div class="wrap">
-    <p class="blog-kicker">Nosso Blog</p>
-    <h1>Bem-estar em <em>movimento</em></h1>
-    <p>Dicas de Pilates, saúde, postura e novidades do estúdio.</p>
+    <p class="blog-kicker">Blog · Estética &amp; Bem-Estar</p>
+    <h1>Beleza que vem do <em>cuidado</em></h1>
+    <p>Dicas de cuidados com a pele, depilação, massagens, autocuidado e bem-estar.</p>
   </div>
 </section>
 
 <div class="wrap">
   <div class="posts-grid">
-    {% comment %}Só posts de Pilates (sem categoria). Os de estética ficam em /estetica-e-bem-estar/blog/{% endcomment %}
-    {% assign posts = site.posts | where_exp: "post", "post.categories == empty" %}
+    {% assign posts = site.categories['estetica-e-bem-estar'] %}
     {% if posts.size > 0 %}
       {% for post in posts %}
       <article class="post-card">
@@ -100,7 +99,7 @@ description: "Dicas de Pilates, bem-estar e novidades do estúdio."
     {% else %}
       <div class="empty-state">
         <h2>Em breve</h2>
-        <p>Os primeiros artigos estão a caminho. Volte logo!</p>
+        <p>Os primeiros artigos sobre estética e bem-estar estão a caminho. Volte logo!</p>
       </div>
     {% endif %}
   </div>

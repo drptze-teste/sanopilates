@@ -21,6 +21,19 @@
     --clay:#C16B43;
     --clay-deep:#A8542F;
     --line:rgba(43,51,39,.14);
+    /* Estética & Bem-Estar — paleta feminina, acolhedora e inclusiva */
+    --rose:#C7678A;
+    --rose-deep:#A84E73;
+    --gold:#C99A3F;
+    --lavender:#E8D5E8;
+  }
+  /* Páginas de Estética: recolore o accent (links, kickers, botões) para rose,
+     reaproveitando todo o CSS existente que usa --clay/--sage-deep. */
+  body.theme-estetica{
+    --clay:#C7678A;
+    --clay-deep:#A84E73;
+    --sage-deep:#9C5E7E;
+    --line:rgba(120,60,90,.14);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
@@ -86,7 +99,9 @@
   .site-footer a{color:var(--clay)}
 </style>
 </head>
-<body>
+{% assign is_estetica = false %}
+{% if page.url contains '/estetica-e-bem-estar' or page.categories contains 'estetica-e-bem-estar' %}{% assign is_estetica = true %}{% endif %}
+<body class="{% if is_estetica %}theme-estetica{% endif %}">
 
 <nav class="topbar">
   <div class="wrap topbar-inner">
@@ -94,12 +109,13 @@
       <img src="{{ site.baseurl }}/images/logo-benesse-transparente.png" alt="Estúdio Benesse" />
       <div class="brand-logo-text">
         <strong>Estúdio Benesse</strong>
-        <span>Pilates, Massagens e Recovery</span>
+        <span>Pilates · Estética · Bem-Estar</span>
       </div>
     </a>
     <div class="nav-links">
       <a href="{{ site.baseurl }}/">Início</a>
-      <a href="{{ site.baseurl }}/blog/" class="{% if page.layout == 'post' or page.url contains '/blog' %}active{% endif %}">Blog</a>
+      <a href="{{ site.baseurl }}/blog/" class="{% if (page.layout == 'post' or page.url contains '/blog') and is_estetica == false %}active{% endif %}">Blog Pilates</a>
+      <a href="{{ site.baseurl }}/estetica-e-bem-estar/" class="{% if is_estetica %}active{% endif %}">Estética &amp; Bem-Estar</a>
     </div>
   </div>
 </nav>
