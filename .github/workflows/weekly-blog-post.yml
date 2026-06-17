@@ -50,15 +50,13 @@ jobs:
             exit 0
           fi
           # Legenda pronta — é só copiar do WhatsApp e colar no seu Status.
-          MENSAGEM="📝 Novidade no blog do Estúdio Benesse Pilates!
-
-✨ $TITULO
-
-👉 Leia agora: $POST_URL
-
-Pilates para mais saúde, postura e qualidade de vida. 🤍
-📍 Chácara Santo Antônio, SP
-📲 @benessestudiopilates"
+          MENSAGEM=$(printf '%s\n\n%s\n\n%s\n\n%s\n%s\n%s' \
+            "📝 Novidade no blog do Estúdio Benesse Pilates!" \
+            "✨ $TITULO" \
+            "👉 Leia agora: $POST_URL" \
+            "Pilates para mais saúde, postura e qualidade de vida. 🤍" \
+            "📍 Chácara Santo Antônio, SP" \
+            "📲 @benessestudiopilates")
           curl -s -G "https://api.callmebot.com/whatsapp.php" \
             --data-urlencode "phone=$PHONE" \
             --data-urlencode "text=$MENSAGEM" \

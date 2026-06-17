@@ -49,15 +49,13 @@ jobs:
             echo "WHATSAPP_PHONE ou CALLMEBOT_APIKEY não configurados — pulando aviso."
             exit 0
           fi
-          MENSAGEM="💆 Novidade no blog de Estética & Bem-Estar do Estúdio Benesse!
-
-✨ $TITULO
-
-👉 Leia agora: $POST_URL
-
-Depilação, limpeza de pele, massagens e autocuidado. 🤍
-📍 Chácara Santo Antônio, SP
-📲 @benessestudiopilates"
+          MENSAGEM=$(printf '%s\n\n%s\n\n%s\n\n%s\n%s\n%s' \
+            "💆 Novidade no blog de Estética & Bem-Estar do Estúdio Benesse!" \
+            "✨ $TITULO" \
+            "👉 Leia agora: $POST_URL" \
+            "Depilação, limpeza de pele, massagens e autocuidado. 🤍" \
+            "📍 Chácara Santo Antônio, SP" \
+            "📲 @benessestudiopilates")
           curl -s -G "https://api.callmebot.com/whatsapp.php" \
             --data-urlencode "phone=$PHONE" \
             --data-urlencode "text=$MENSAGEM" \
