@@ -32,20 +32,56 @@ const temasFallback = [
 ];
 const temaFallback = temasFallback[semana % temasFallback.length];
 
-// ── Galeria de fotos (Unsplash, livres) — pilates / bem-estar ───────────────
-// Variam a cada semana para os posts não ficarem repetitivos.
-const galeria = [
-  { url: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80', alt: 'Mulheres praticando Pilates no estúdio' },
-  { url: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&q=80', alt: 'Movimento consciente sobre o mat' },
-  { url: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1200&q=80', alt: 'Alongamento e bem-estar ao entardecer' },
-  { url: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80', alt: 'Respiração e equilíbrio' },
-  { url: 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=1200&q=80', alt: 'Acessórios de Pilates e mobilidade' },
-  { url: 'https://images.unsplash.com/photo-1592432678016-e910b452f9a2?w=1200&q=80', alt: 'Tapetes de Pilates prontos para a aula' },
-];
-const n = galeria.length;
-const capa    = galeria[semana % n];
-const inline1 = galeria[(semana + 2) % n];
-const inline2 = galeria[(semana + 4) % n];
+// ── Fotos dinâmicas por tema (Unsplash API) ────────────────────────────────
+// Extrai palavras significativas do tema para usar como query de busca
+function extrairKeywords(tema) {
+  const stopWords = new Set([
+    'a','o','e','de','do','da','dos','das','em','no','na','nos','nas',
+    'por','para','com','como','que','se','um','uma','ao','aos',
+    'sao','ou','vs','mas','nem','ja','nao','mais','menos','muito',
+    'bem','mal','seu','sua','seus','suas','isso','esta','este','qual',
+    'quem','quando','onde','porque','pois','tudo','todo','toda',
+    'depois','antes','ainda','mesmo','entre','sobre','aqui','ali'
+  ]);
+  const palavras = tema
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(p => p.length > 2 && !stopWords.has(p));
+  const keywords = ['pilates', ...palavras.slice(0, 4)];
+  return [...new Set(keywords)].join(' ');
+}
+
+// Busca 3 fotos no Unsplash relevantes ao tema; cai no fallback se falhar
+async function buscarFotosUnsplash(query) {
+  const fallback = [
+    { url: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=80', alt: 'Pilates no estúdio' },
+    { url: 'https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&q=80', alt: 'Exercício de Pilates no mat' },
+    { url: 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=1200&q=80', alt: 'Pilates com equipamentos' },
+  ];
+  const key = process.env.UNSPLASH_ACCESS_KEY;
+  if (!key) {
+    console.log('UNSPLASH_ACCESS_KEY não configurada — usando fotos genéricas.');
+    return fallback;
+  }
+  try {
+    const apiUrl = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&orientation=landscape&per_page=5&client_id=${key}`;
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`Unsplash HTTP ${res.status}`);
+    const data = await res.json();
+    const fotos = (data.results || []).slice(0, 3).map(foto => ({
+      url: `${foto.urls.raw}&w=1200&q=80&fit=crop`,
+      alt: foto.alt_description || query,
+    }));
+    if (fotos.length < 3) return [...fotos, ...fallback].slice(0, 3);
+    console.log(`Fotos Unsplash para "${query}": ${fotos.length} encontradas.`);
+    return fotos;
+  } catch (err) {
+    console.log(`Erro Unsplash: ${err.message} — usando fotos genéricas.`);
+    return fallback;
+  }
+}
 
 // ── Buscar tendências no Google Trends (Brasil) ─────────────────────────────
 const palavrasChave = [
@@ -107,6 +143,11 @@ async function main() {
   }
 
   console.log(`\nSemana: ${semana} | Tema: ${temaDestaque}`);
+
+  // ── Fotos relevantes ao tema ────────────────────────────────────────────────
+  const keywords = extrairKeywords(temaDestaque);
+  console.log(`Keywords para fotos: "${keywords}"`);
+  const [capa, inline1, inline2] = await buscarFotosUnsplash(keywords);
 
   // ── Gemini ──────────────────────────────────────────────────────────────────
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);

@@ -28,6 +28,7 @@ jobs:
       - name: Gerar post com Gemini + Google Trends
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
         run: node .github/scripts/gerar-post.js
 
       - name: Commit e push do post

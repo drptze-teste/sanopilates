@@ -25,7 +25,8 @@ Posts publicados **automaticamente toda semana** por IA. Serve de **template** p
 - **Post semanal automático:** `.github/workflows/weekly-blog-post.yml`
   - Roda **toda segunda-feira 18h UTC (15h Brasília)** (`cron: '0 18 * * 1'`)
   - Executa `.github/scripts/gerar-post.js` (Node 20): gera o post com **Gemini + Google Trends**, commita e dá push.
-  - Requer secret do GitHub com a chave da API Gemini.
+  - Requer secrets do GitHub: `GEMINI_API_KEY` (obrigatório) e `UNSPLASH_ACCESS_KEY` (opcional — fotos dinâmicas por tema; sem ela usa 3 fotos genéricas de fallback).
+  - `UNSPLASH_ACCESS_KEY`: app gratuito em https://unsplash.com/developers → copiar o **Access Key**.
 - Para postar manualmente: criar `.md` em `_posts/` (`AAAA-MM-DD-titulo.md` com front matter) e push.
 
 ## Convenções / armadilhas
