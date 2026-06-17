@@ -135,26 +135,21 @@ layout: default
 </div>
 
 <script>
-// Busca o número de acessos do GoatCounter via API
+// Mostra o número de acessos da matéria via contador PÚBLICO do GoatCounter.
+// Requer habilitar "visitor counter" nas configurações do GoatCounter.
 (async () => {
   try {
     const path = window.location.pathname;
-    // API do GoatCounter: stats no período de 30 dias anteriores até hoje
-    const end = new Date().toISOString().split('T')[0];
-    const start = new Date(Date.now() - 30*24*60*60*1000).toISOString().split('T')[0];
-
-    const res = await fetch(`https://sanopilates.goatcounter.com/api/stats?start=${start}&end=${end}&path=${encodeURIComponent(path)}`);
+    const res = await fetch(`https://sanopilates.goatcounter.com/counter/${encodeURIComponent(path)}.json`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
     const data = await res.json();
-    const total = data.reduce((sum, day) => sum + day.count, 0);
-
-    if (total > 0) {
-      document.getElementById('view-count').textContent = total.toLocaleString('pt-BR');
+    const total = data.count_unique || data.count;   // único (≈ IP) ou total
+    if (total && total !== '0') {
+      document.getElementById('view-count').textContent = total;
       document.getElementById('post-views').style.display = 'inline-flex';
     }
   } catch (err) {
-    console.log('Erro ao buscar acessos:', err.message);
+    console.log('Contador indisponível:', err.message);
   }
 })();
 </script>

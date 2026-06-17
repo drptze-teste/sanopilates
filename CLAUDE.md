@@ -34,7 +34,8 @@ Posts publicados **automaticamente toda semana** por IA. Serve de **template** p
 - **Contador de acessos:** GoatCounter (script no fim do `<body>` de `_layouts/default.html`).
   - Privacidade: sem cookies, sem IP armazenado, sem aviso LGPD. Conta visitantes únicos/dia.
   - Painel: **https://sanopilates.goatcounter.com** (requer conta gratuita com o código `sanopilates`).
-  - Para trocar o site: editar `data-goatcounter` no layout.
+  - Para trocar o site: editar `data-goatcounter` no layout. **Conta correta: `sanopilates`** (não `benesseblogpilates`).
+  - **Contador visível por post:** `post.html` consome o endpoint público `https://sanopilates.goatcounter.com/counter/<path>.json`. Exige habilitar o "visitor counter" em GoatCounter → Settings.
 - Para postar manualmente: criar `.md` em `_posts/` (`AAAA-MM-DD-titulo.md` com front matter) e push.
 
 ## Estética & Bem-Estar (segunda seção, mesmo domínio)
