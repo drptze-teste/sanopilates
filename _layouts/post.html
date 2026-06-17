@@ -19,6 +19,7 @@ layout: default
   .post-title em{font-style:italic;color:var(--clay)}
   .post-meta{font-size:14px;color:var(--ink-soft)}
   .post-meta time{font-weight:600;color:var(--ink)}
+  .post-views{display:inline-flex;align-items:center;gap:4px;color:var(--sage-deep);font-size:13px}
 
   .post-cover{
     width:100%;max-height:480px;object-fit:cover;
@@ -89,6 +90,7 @@ layout: default
     <p class="post-meta">
       <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d de %B de %Y" }}</time>
       {% if page.author %} · {{ page.author }}{% endif %}
+      <span class="post-views" id="post-views" style="display:none">👁️ <span id="view-count">—</span></span>
     </p>
   </div>
 </section>
@@ -115,3 +117,28 @@ layout: default
     </p>
   </aside>
 </div>
+
+<script>
+// Busca o número de acessos do GoatCounter via API
+(async () => {
+  try {
+    const path = window.location.pathname;
+    // API do GoatCounter: stats no período de 30 dias anteriores até hoje
+    const end = new Date().toISOString().split('T')[0];
+    const start = new Date(Date.now() - 30*24*60*60*1000).toISOString().split('T')[0];
+
+    const res = await fetch(`https://sanopilates.goatcounter.com/api/stats?start=${start}&end=${end}&path=${encodeURIComponent(path)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+    const total = data.reduce((sum, day) => sum + day.count, 0);
+
+    if (total > 0) {
+      document.getElementById('view-count').textContent = total.toLocaleString('pt-BR');
+      document.getElementById('post-views').style.display = 'inline-flex';
+    }
+  } catch (err) {
+    console.log('Erro ao buscar acessos:', err.message);
+  }
+})();
+</script>
