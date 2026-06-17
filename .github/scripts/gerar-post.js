@@ -32,25 +32,69 @@ const temasFallback = [
 ];
 const temaFallback = temasFallback[semana % temasFallback.length];
 
-// ── Fotos dinâmicas por tema (Unsplash API) ────────────────────────────────
-// Extrai palavras significativas do tema para usar como query de busca
-function extrairKeywords(tema) {
-  const stopWords = new Set([
-    'a','o','e','de','do','da','dos','das','em','no','na','nos','nas',
-    'por','para','com','como','que','se','um','uma','ao','aos',
-    'sao','ou','vs','mas','nem','ja','nao','mais','menos','muito',
-    'bem','mal','seu','sua','seus','suas','isso','esta','este','qual',
-    'quem','quando','onde','porque','pois','tudo','todo','toda',
-    'depois','antes','ainda','mesmo','entre','sobre','aqui','ali'
-  ]);
-  const palavras = tema
+// ── Texto: tokenização e palavras a ignorar ────────────────────────────────
+const STOP_WORDS = new Set([
+  'a','o','e','de','do','da','dos','das','em','no','na','nos','nas',
+  'por','para','com','como','que','se','um','uma','ao','aos',
+  'sao','ou','vs','mas','nem','ja','nao','mais','menos','muito',
+  'bem','mal','seu','sua','seus','suas','isso','esta','este','qual',
+  'quem','quando','onde','porque','pois','tudo','todo','toda',
+  'depois','antes','ainda','mesmo','entre','sobre','aqui','ali'
+]);
+
+// Quebra o texto em palavras significativas (sem acento, sem stop words)
+function tokeniza(texto) {
+  return texto
     .toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9\s]/g, ' ')
     .split(/\s+/)
-    .filter(p => p.length > 2 && !stopWords.has(p));
-  const keywords = ['pilates', ...palavras.slice(0, 4)];
+    .filter(p => p.length > 2 && !STOP_WORDS.has(p));
+}
+
+// ── Fotos dinâmicas por tema (Unsplash API) ────────────────────────────────
+// Extrai palavras significativas do tema para usar como query de busca
+function extrairKeywords(tema) {
+  const keywords = ['pilates', ...tokeniza(tema).slice(0, 4)];
   return [...new Set(keywords)].join(' ');
+}
+
+// ── Anti-repetição: comparar tema com os últimos posts ──────────────────────
+// Lê os títulos dos últimos N posts já publicados (mais recentes primeiro)
+function lerPostsRecentes(n = 3) {
+  try {
+    const dir = path.join(process.cwd(), '_posts');
+    return fs.readdirSync(dir)
+      .filter(f => f.endsWith('.md'))
+      .sort().reverse().slice(0, n)        // nome começa com AAAA-MM-DD → ordem cronológica
+      .map(f => {
+        const txt = fs.readFileSync(path.join(dir, f), 'utf8');
+        const m = txt.match(/^title:\s*(.+)$/im);
+        return (m ? m[1].trim() : f).replace(/^["']|["']$/g, '');
+      });
+  } catch (e) {
+    console.log(`Não foi possível ler posts recentes: ${e.message}`);
+    return [];
+  }
+}
+
+// Palavras-chave significativas de um texto, ignorando "pilates" (comum a todos)
+function palavrasSignificativas(texto) {
+  return new Set(tokeniza(texto).filter(p => p !== 'pilates'));
+}
+
+// Verifica se um tema candidato repete o assunto de algum post recente
+function ehRepetitivo(candidato, recentes) {
+  const cand = palavrasSignificativas(candidato);
+  if (cand.size === 0) return false;
+  for (const titulo of recentes) {
+    const post = palavrasSignificativas(titulo);
+    let comuns = 0;
+    for (const p of cand) if (post.has(p)) comuns++;
+    // Repetitivo se compartilha 2+ palavras-chave OU metade ou mais do candidato
+    if (comuns >= 2 || comuns / cand.size >= 0.5) return true;
+  }
+  return false;
 }
 
 // Busca 3 fotos no Unsplash relevantes ao tema; cai no fallback se falhar
@@ -121,7 +165,7 @@ async function buscarTendencias() {
 async function main() {
   // ── Tendências ─────────────────────────────────────────────────────────────
   let contextoTrends = '';
-  let temaDestaque = temaFallback;
+  let trendQueries = [];
 
   try {
     console.log('Buscando tendências no Google Trends Brasil...');
@@ -130,7 +174,7 @@ async function main() {
     if (tendencias.length > 0) {
       tendencias.sort((a, b) => b.value - a.value);
       const top5 = tendencias.slice(0, 5);
-      temaDestaque = top5[0].query;
+      trendQueries = top5.map(t => t.query);
       contextoTrends = `\n\nTendências atuais no Google Brasil (use como inspiração):\n` +
         top5.map((t, i) => `${i + 1}. "${t.query}" (relacionado a: ${t.origem})`).join('\n');
       console.log('Top tendências:');
@@ -142,7 +186,23 @@ async function main() {
     console.log(`Erro trends: ${e.message}. Usando tema rotativo.`);
   }
 
-  console.log(`\nSemana: ${semana} | Tema: ${temaDestaque}`);
+  // ── Escolher tema evitando repetir os últimos posts ──────────────────────────
+  const recentes = lerPostsRecentes(3);
+  console.log(`Posts recentes: ${recentes.join(' | ') || '(nenhum)'}`);
+
+  // Candidatos em ordem de preferência: tendências primeiro, depois fallback rotativo
+  const candidatos = [...trendQueries];
+  for (let i = 0; i < temasFallback.length; i++) {
+    candidatos.push(temasFallback[(semana + i) % temasFallback.length]);
+  }
+
+  let temaDestaque = candidatos.find(c => !ehRepetitivo(c, recentes));
+  if (!temaDestaque) {
+    temaDestaque = candidatos[0] || temaFallback;
+    console.log('Todos os candidatos repetem posts recentes — usando o primeiro mesmo assim.');
+  }
+
+  console.log(`\nSemana: ${semana} | Tema escolhido: ${temaDestaque}`);
 
   // ── Fotos relevantes ao tema ────────────────────────────────────────────────
   const keywords = extrairKeywords(temaDestaque);

@@ -27,6 +27,7 @@ Posts publicados **automaticamente toda semana** por IA. Serve de **template** p
   - Executa `.github/scripts/gerar-post.js` (Node 20): gera o post com **Gemini + Google Trends**, commita e dá push.
   - Requer secrets do GitHub: `GEMINI_API_KEY` (obrigatório) e `UNSPLASH_ACCESS_KEY` (opcional — fotos dinâmicas por tema; sem ela usa 3 fotos genéricas de fallback).
   - `UNSPLASH_ACCESS_KEY`: app gratuito em https://unsplash.com/developers → copiar o **Access Key**.
+  - **Anti-repetição:** o script lê os títulos dos 3 últimos posts e escolhe o 1º tema candidato (tendência ou fallback) que não repita o assunto recente — evita semanas seguidas sobre o mesmo tópico.
 - Para postar manualmente: criar `.md` em `_posts/` (`AAAA-MM-DD-titulo.md` com front matter) e push.
 
 ## Convenções / armadilhas
