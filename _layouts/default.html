@@ -115,7 +115,8 @@
     <div class="nav-links">
       <a href="{{ site.baseurl }}/">Início</a>
       <a href="{{ site.baseurl }}/blog/" class="{% if (page.layout == 'post' or page.url contains '/blog') and is_estetica == false %}active{% endif %}">Blog Pilates</a>
-      <a href="{{ site.baseurl }}/estetica-e-bem-estar/" class="{% if is_estetica %}active{% endif %}">Estética &amp; Bem-Estar</a>
+      <a href="{{ site.baseurl }}/estetica-e-bem-estar/" class="{% if is_estetica and page.url != site.baseurl | append: '/estetica-e-bem-estar/blog/' %}active{% endif %}">Estética &amp; Bem-Estar</a>
+      <a href="{{ site.baseurl }}/estetica-e-bem-estar/blog/" class="{% if page.url contains '/estetica-e-bem-estar/blog' %}active{% endif %}">Blog Estética</a>
     </div>
   </div>
 </nav>

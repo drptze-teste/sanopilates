@@ -66,6 +66,16 @@ Seção dedicada a depilação, limpeza de pele e massagens em `sanopilates.com.
 - **Link estética no card massage:** novo parágrafo "Conheça mais sobre nossos serviços de estética →" antes do CTA
 - **GoatCounter script:** adicionado diretamente antes do `</body>` em `index.html` (arquivo é HTML puro, não usa Jekyll layout)
 
+## Cross-Links Blog (Pilates ↔ Estética) — 2026-06-18
+Melhorias na navegação entre seções de conteúdo:
+- **Header navigation** (`_layouts/default.html`):
+  - Adicionado link "Blog Estética" na topbar (após "Blog Pilates")
+  - Classes `.active` diferenciam qual blog o usuário está consultando
+- **Blog Estética** (`estetica-e-bem-estar/blog/index.html`):
+  - Nova seção `.cross-pilates` com chamada "Conheça também nosso blog de Pilates"
+  - Botão destacado em clay color linkando para `/blog/`
+  - Posicionado abaixo da grid de posts para visibilidade
+
 ## Convenções / armadilhas
 - **Decap CMS:** o `<script>` do Decap deve ficar no **fim do `<body>`**, nunca no `<head>`.
 - **Não apagar o `CNAME`** — é o que mantém o domínio `sanopilates.com.br` apontando para o Pages.

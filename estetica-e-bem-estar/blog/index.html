@@ -4,6 +4,22 @@ title: "Blog de Estética & Bem-Estar"
 description: "Dicas de beleza, cuidados com a pele, depilação, massagens e autocuidado."
 ---
 <style>
+  /* ===== CROSS-LINK PILATES ===== */
+  .cross-pilates{
+    background:linear-gradient(135deg,rgba(193,107,67,.08) 0%,rgba(120,139,111,.12) 100%);
+    margin:80px 0;padding:clamp(48px,7vw,72px) 24px;border-radius:20px;text-align:center;
+  }
+  .cross-pilates h2{font-size:clamp(24px,4vw,36px);margin-bottom:12px;color:var(--ink)}
+  .cross-pilates p{font-size:16px;color:var(--ink-soft);max-width:56ch;margin:0 auto 24px}
+  .btn-cross{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--clay);color:#fff;font-weight:700;font-size:16px;
+    padding:14px 28px;border-radius:12px;
+    transition:background .2s ease,transform .15s ease;
+    text-decoration:none;
+  }
+  .btn-cross:hover{background:var(--clay-deep);transform:translateY(-2px)}
+
   .blog-hero{
     padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px);
     background:
@@ -102,5 +118,12 @@ description: "Dicas de beleza, cuidados com a pele, depilação, massagens e aut
         <p>Os primeiros artigos sobre estética e bem-estar estão a caminho. Volte logo!</p>
       </div>
     {% endif %}
+  </div>
+
+  <!-- ===== CROSS-LINK PILATES ===== -->
+  <div class="cross-pilates">
+    <h2>Conheça também nosso blog de Pilates</h2>
+    <p>Movimento, postura, bem-estar e qualidade de vida. Artigos semanais sobre Pilates, alongamento e saúde.</p>
+    <a href="{{ site.baseurl }}/blog/" class="btn-cross">→ Blog Pilates</a>
   </div>
 </div>
