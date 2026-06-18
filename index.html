@@ -560,6 +560,11 @@
   <a href="/estetica-e-bem-estar/" style="color:#D89CB4;font-weight:600;text-decoration:none">Estética &amp; Bem-Estar</a>
   &nbsp;·&nbsp;
   <a href="/blog/" style="color:rgba(255,255,255,.8);text-decoration:none">Blog</a>
+  <br>
+  <span id="site-views" style="display:none;align-items:center;gap:6px;margin-top:14px;font-size:13px;color:rgba(255,255,255,.7)">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span id="site-views-count">0</span> visitas no site
+  </span>
 </footer>
 
 <!-- Barra fixa no mobile (ação sempre a um toque) -->
@@ -581,6 +586,24 @@
     </a>
   </div>
 </div>
+
+<!-- Contador total de visitas do site (endpoint público GoatCounter) -->
+<script>
+(async () => {
+  try {
+    const res = await fetch('https://sanopilates.goatcounter.com/counter/TOTAL.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const total = data.count_unique || data.count;
+    if (total) {
+      document.getElementById('site-views-count').textContent = total;
+      document.getElementById('site-views').style.display = 'inline-flex';
+    }
+  } catch (err) {
+    console.log('Contador do site indisponível:', err.message);
+  }
+})();
+</script>
 
 <!-- GoatCounter — contagem de acessos (privacidade: sem cookies, sem IP armazenado) -->
 <!-- Painel: https://sanopilates.goatcounter.com  ·  conta em goatcounter.com -->

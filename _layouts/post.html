@@ -143,11 +143,9 @@ layout: default
     const res = await fetch(`https://sanopilates.goatcounter.com/counter/${encodeURIComponent(path)}.json`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    const total = data.count_unique || data.count;   // único (≈ IP) ou total
-    if (total && total !== '0') {
-      document.getElementById('view-count').textContent = total;
-      document.getElementById('post-views').style.display = 'inline-flex';
-    }
+    const total = data.count_unique || data.count || '0';   // único (≈ IP) ou total
+    document.getElementById('view-count').textContent = total;
+    document.getElementById('post-views').style.display = 'inline-flex';
   } catch (err) {
     console.log('Contador indisponível:', err.message);
   }

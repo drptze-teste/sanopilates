@@ -97,6 +97,13 @@
   .site-footer img{height:56px;width:auto;opacity:.85}
   .site-footer p{font-size:13px;color:var(--ink-soft)}
   .site-footer a{color:var(--clay)}
+  .site-views{
+    display:none;align-items:center;gap:6px;
+    font-size:13px;color:var(--ink-soft);font-weight:600;
+    background:var(--cream);border:1px solid var(--line);
+    border-radius:100px;padding:6px 14px;
+  }
+  .site-views svg{width:15px;height:15px;stroke:var(--clay)}
 </style>
 </head>
 {% assign is_estetica = false %}
@@ -128,8 +135,30 @@
     <img src="{{ site.baseurl }}/images/logo-benesse.png" alt="Estúdio Benesse" />
     <p>© {{ 'now' | date: "%Y" }} Estúdio Benesse · Pilates, Massagens e Recovery<br>
     Chácara Santo Antônio, São Paulo</p>
+    <span class="site-views" id="site-views">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span id="site-views-count">0</span> visitas no site
+    </span>
   </div>
 </footer>
+
+<!-- Contador total de visitas do site (endpoint público GoatCounter) -->
+<script>
+(async () => {
+  try {
+    const res = await fetch('https://sanopilates.goatcounter.com/counter/TOTAL.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const total = data.count_unique || data.count;
+    if (total) {
+      document.getElementById('site-views-count').textContent = total;
+      document.getElementById('site-views').style.display = 'inline-flex';
+    }
+  } catch (err) {
+    console.log('Contador do site indisponível:', err.message);
+  }
+})();
+</script>
 
 <!-- GoatCounter — contagem de acessos (privacidade: sem cookies, sem IP armazenado) -->
 <!-- Painel: https://sanopilates.goatcounter.com  ·  conta em goatcounter.com -->

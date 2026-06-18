@@ -35,7 +35,9 @@ Posts publicados **automaticamente toda semana** por IA. Serve de **template** p
   - Privacidade: sem cookies, sem IP armazenado, sem aviso LGPD. Conta visitantes únicos/dia.
   - Painel: **https://sanopilates.goatcounter.com** (requer conta gratuita com o código `sanopilates`).
   - Para trocar o site: editar `data-goatcounter` no layout. **Conta correta: `sanopilates`** (não `benesseblogpilates`).
-  - **Contador visível por post:** `post.html` consome o endpoint público `https://sanopilates.goatcounter.com/counter/<path>.json` e mostra 👁️ ao lado da data. Lê `count_unique` (visitantes únicos ≈ IP). Requer a opção **"Allow adding visitor counts on your website"** habilitada em GoatCounter → Settings (**já habilitada**).
+  - **Contador visível por post:** `post.html` consome o endpoint público `https://sanopilates.goatcounter.com/counter/<path>.json` e mostra 👁️ ao lado da data. Lê `count_unique` (visitantes únicos ≈ IP). Requer a opção **"Allow adding visitor counts on your website"** habilitada em GoatCounter → Settings (**já habilitada**). Agora mostra **sempre** (mesmo com 0 visitas).
+  - **Contador total do site (visível):** badge "👁️ X visitas no site" no rodapé de TODAS as páginas. Em páginas Jekyll vem do `.site-views` em `_layouts/default.html`; na home Pilates (`index.html`, HTML puro) tem snippet próprio no `<footer>`. Ambos buscam `https://sanopilates.goatcounter.com/counter/TOTAL.json`.
+  - **Diagnóstico (2026-06-18):** GoatCounter confirmado funcionando — `/counter/TOTAL.json` retornava 15 visitas (home 2, landing estética 4, listagem blog 3). O "não aparecia" era porque o contador visível só existia em posts e só com ≥1 visita. Corrigido o `src` do script de `//gc.zgo.at` para `https://gc.zgo.at` (URL protocol-relative).
 - Para postar manualmente: criar `.md` em `_posts/` (`AAAA-MM-DD-titulo.md` com front matter) e push.
 
 ## Estética & Bem-Estar (segunda seção, mesmo domínio)
