@@ -58,8 +58,17 @@ Seção dedicada a depilação, limpeza de pele e massagens em `sanopilates.com.
   - `{% include data_pt.html date=post.date abbr=true %}` → "17 jun 2026"
   - Usado em `post.html` e nas duas listagens de blog.
 
+## Landing Page Pilates (index.html) — Melhorias 2026-06-18
+- **Google Maps link:** botão "Ao lado do Shopping Morumbi" agora abre Google Maps com endereço do estúdio
+- **Navegação rápida para blogs:** 2 novos botões (📝 Blog Pilates + ✨ Blog Estética) no topo, ao lado do location pill
+- **Seção "Por que escolher" expandida:** items 05 (Fisioterapeutas especializados) e 06 (Serviços de Estética) com link para `/estetica-e-bem-estar/`
+- **Preço atualizado:** R$300 → R$260 com legenda "(valor para o plano semestral 1x por semana)"
+- **Link estética no card massage:** novo parágrafo "Conheça mais sobre nossos serviços de estética →" antes do CTA
+- **GoatCounter script:** adicionado diretamente antes do `</body>` em `index.html` (arquivo é HTML puro, não usa Jekyll layout)
+
 ## Convenções / armadilhas
 - **Decap CMS:** o `<script>` do Decap deve ficar no **fim do `<body>`**, nunca no `<head>`.
 - **Não apagar o `CNAME`** — é o que mantém o domínio `sanopilates.com.br` apontando para o Pages.
 - É blog Jekyll, **não** React.
+- **index.html é HTML puro** — não possui front matter Jekyll; scripts da layout precisam ser injetados manualmente (ex: GoatCounter).
 - `GUIA-REPLICAR-BLOG.md` documenta como clonar este blog para um novo site.
